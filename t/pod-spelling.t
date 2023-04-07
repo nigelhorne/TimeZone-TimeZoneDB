@@ -21,7 +21,6 @@ __END__
 AnnoCPAN
 CPAN
 CPANTS
-FCGI
 GPL
 Init
 ISPs

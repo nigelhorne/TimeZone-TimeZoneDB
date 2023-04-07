@@ -10,7 +10,7 @@ use URI;
 
 =head1 NAME
 
-TimeZone::TimeZoneDB - Interface to L<https://timezondb.com> for looking up Timezone data
+TimeZone::TimeZoneDB - Interface to L<https://timezonedb.com> for looking up Timezone data
 
 =head1 VERSION
 

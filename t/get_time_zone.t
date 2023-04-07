@@ -29,6 +29,8 @@ TZ: {
 
 		cmp_ok($tz->{'zoneName'}, 'eq', 'Europe/London', 'Ramsgate is in the UK timezone');
 
+		sleep(1);	# Throttle for free accounts
+
 		my $location = new_ok('Geo::Location::Point' => [ latitude => 51.34, longitude => 1.42 ]);
 		$tz = $tzdb->get_time_zone($location);
 
