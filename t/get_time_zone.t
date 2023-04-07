@@ -32,6 +32,7 @@ TZ: {
 		sleep(1);	# Throttle for free accounts
 
 		my $location = new_ok('Geo::Location::Point' => [ latitude => 51.34, longitude => 1.42 ]);
+		$tzdb = $tzdb->new();	# Test clone
 		$tz = $tzdb->get_time_zone($location);
 
 		if($ENV{'TEST_VERBOSE'}) {
