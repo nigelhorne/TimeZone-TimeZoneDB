@@ -10,7 +10,7 @@ use URI;
 
 =head1 NAME
 
-TimeZone::TimeZoneDB - Interface to L<https://timezondb.com> for looking up TimeZone data
+TimeZone::TimeZoneDB - Interface to L<https://timezondb.com> for looking up Timezone data
 
 =head1 VERSION
 
@@ -74,7 +74,7 @@ sub new {
 	return bless { key => $key, ua => $ua, host => $host }, $class;
 }
 
-=head2 tz
+=head2 get_time_zone
 
     use Geo::Location::Point;
 
