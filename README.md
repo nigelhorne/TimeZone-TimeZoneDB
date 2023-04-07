@@ -1,6 +1,6 @@
 # NAME
 
-TimeZone::TimeZoneDB - Interface to [https://timezondb.com](https://timezondb.com) for looking up TimeZone data
+TimeZone::TimeZoneDB - Interface to [https://timezondb.com](https://timezondb.com) for looking up Timezone data
 
 # VERSION
 
@@ -30,7 +30,7 @@ to look up timezones.
     my $tz = $tzdb->tz({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
     print "Ramsgate's timezone is $tz.\n";
 
-## tz
+## get\_time\_zone
 
     use Geo::Location::Point;
 
