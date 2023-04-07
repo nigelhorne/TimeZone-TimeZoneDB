@@ -95,7 +95,7 @@ sub get_time_zone {
 		$param{latitude} = $location->latitude();
 		$param{longitude} = $location->longitude();
 	} elsif(ref($_[0])) {
-		Carp::croak('Usage: get_time_zone(latitude => $latitude, longitude => $logitude)');
+		Carp::carp('Usage: get_time_zone(latitude => $latitude, longitude => $logitude)');
 		return;
 	} elsif(@_ % 2 == 0) {
 		%param = @_;
@@ -104,8 +104,8 @@ sub get_time_zone {
 	my $latitude = $param{latitude};
 	my $longitude = $param{longitude};
 
-	if(!defined($latitude)) {
-		Carp::croak('Usage: get_time_zone(latitude => $latitude, longitude => $logitude)');
+	if((!defined($latitude)) || (!defined($longitude))) {
+		Carp::carp('Usage: get_time_zone(latitude => $latitude, longitude => $logitude)');
 		return;
 	}
 
