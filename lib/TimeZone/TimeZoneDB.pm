@@ -10,7 +10,7 @@ use URI;
 
 =head1 NAME
 
-Weather::Meteo - Interface to L<https://timezondb.com> for looking up TimeZone data
+TimeZone::TimeZoneDB - Interface to L<https://timezondb.com> for looking up TimeZone data
 
 =head1 VERSION
 
@@ -24,13 +24,11 @@ our $VERSION = '0.01';
 
       use TimeZone::TimeZoneDB;
 
-      my $tzdb = TimeZone::TimeZoneDB->new();
-      my $tz = $tzdb->get_time_zone({ key => 'XXXXXXX', latitude => 0.1, longitude => 0.2 });
+      my $tzdb = TimeZone::TimeZoneDB->new(key => 'XXXXXXXX');
+      my $tz = $tzdb->get_time_zone({ latitude => 0.1, longitude => 0.2 });
 
 =head1 DESCRIPTION
 
-Weather::Meteo provides an interface to open-meteo.com
-for historical weather data
 TimeZone::TimeZoneDB provides an interface to timezonedb.com
 to look up timezones.
 
@@ -38,15 +36,13 @@ to look up timezones.
 
 =head2 new
 
-    my $meteo = Weather::Meteo->new();
-    my $ua = LWP::UserAgent->new();
+    my $tzdb = TimeZone::TimeZoneDB->new();
+    my $ua = LWP::UserAgent::Throttled->new();
     $ua->env_proxy(1);
-    $meteo = Weather::Meteo->new(ua => $ua);
+    $tzdb = TimeZone::TimeZoneDB->new(ua => $ua, key => 'XXXXX');
 
-    my $weather = $meteo->weather({ latitude => 51.34, longitude => 1.42, date => '2022-12-25' });
-    my @snowfall = @{$weather->{'hourly'}->{'snowfall'}};
-
-    print 'Number of cms of snow: ', $snowfall[1], "\n";
+    my $tz = $tzdb->tz({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
+    print "Ramsgate's timezone is $tz.\n";
 
 =cut
 
@@ -54,11 +50,18 @@ sub new {
 	my($class, %args) = @_;
 
 	if(!defined($class)) {
-		# Weather::Meteo::new() used rather than Weather::Meteo->new()
+		# TimeZone::TimeZoneDB::new() used rather than TimeZone::TimeZoneDB->new()
 		$class = __PACKAGE__;
 	} elsif(ref($class)) {
 		# clone the given object
 		return bless { %{$class}, %args }, ref($class);
+	}
+
+	my $key = $args{'key'};
+
+	if(!defined($key)) {
+		Carp::carp(__PACKAGE__, ': "key" argument not given');
+		return;
 	}
 
 	my $ua = $args{ua};
@@ -66,35 +69,31 @@ sub new {
 		$ua = LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 		$ua->default_header(accept_encoding => 'gzip,deflate');
 	}
-	my $host = $args{host} || 'archive-api.open-meteo.com';
+	my $host = $args{host} || 'api.timezonedb.com';
 
-	return bless { ua => $ua, host => $host }, $class;
+	return bless { key => $key, ua => $ua, host => $host }, $class;
 }
 
-=head2 weather
+=head2 tz
 
     use Geo::Location::Point;
 
     my $ramsgate = Geo::Location::Point->new({ latitude => 51.34, longitude => 1.42 });
-    # Print snowfall at 1AM on Christmas morning in Ramsgate
-    $weather = $meteo->weather($ramsgate, '2022-12-25');
-    @snowfall = @{$weather->{'hourly'}->{'snowfall'}};
-
-    print 'Number of cms of snow: ', $snowfall[1], "\n";
+    # Find Ramsgate's timezone
+    $tz = $tzdb->get_time_zone($ramsgate)->{'zoneName'}, "\n";
 
 =cut
 
-sub weather {
+sub get_time_zone {
 	my $self = shift;
 	my %param;
 
 	if(ref($_[0]) eq 'HASH') {
 		%param = %{$_[0]};
-	} elsif((@_ == 2) && (ref($_[0]) =~ /::/) && ($_[0]->can('latitude'))) {
+	} elsif((@_ == 1) && (ref($_[0]) =~ /::/) && ($_[0]->can('latitude'))) {
 		my $location = $_[0];
 		$param{latitude} = $location->latitude();
 		$param{longitude} = $location->longitude();
-		$param{'date'} = $_[1];
 	} elsif(ref($_[0])) {
 		Carp::croak('Usage: weather(latitude => $latitude, longitude => $logitude, date => "YYYY-MM-DD")');
 		return;
@@ -104,31 +103,25 @@ sub weather {
 
 	my $latitude = $param{latitude};
 	my $longitude = $param{longitude};
-	my $date = $param{'date'};
 
 	if(!defined($latitude)) {
-		Carp::croak('Usage: weather(latitude => $latitude, longitude => $logitude, date => "YYYY-MM-DD")');
+		Carp::croak('Usage: get_time_zone(latitude => $latitude, longitude => $logitude)');
 		return;
 	}
 
-	my $uri = URI->new("https://$self->{host}/v1/archive");
+	my $uri = URI->new("https://$self->{host}/v2.1/get-time-zone");
 	my %query_parameters = (
-		'latitude' => $latitude,
-		'longitude' => $longitude,
-		'start_date' => $date,
-		'end_date' => $date,
-		'hourly' => 'temperature_2m,rain,snowfall,weathercode',
-		'daily' => 'weathercode,temperature_2m_max,temperature_2m_min,rain_sum,snowfall_sum,precipitation_hours',
-		'timezone' => 'Europe/London',	# FIXME
-			# https://stackoverflow.com/questions/16086962/how-to-get-a-time-zone-from-a-location-using-latitude-and-longitude-coordinates
-		'windspeed_unit' => 'mph',
-		'precipitation_unit' => 'inch'
+		by => 'position',
+		lat => $latitude,
+		lng => $longitude,
+		format => 'json',
+		key => $self->{'key'}
 	);
 
 	$uri->query_form(%query_parameters);
 	my $url = $uri->as_string();
 
-	$url =~ s/%2C/,/g;
+	# $url =~ s/%2C/,/g;
 
 	my $res = $self->{ua}->get($url);
 
@@ -140,13 +133,11 @@ sub weather {
 
 	my $json = JSON::MaybeXS->new()->utf8();
 	if(my $rc = $json->decode($res->decoded_content())) {
-		if($rc->{'error'}) {
+		if($rc->{'status'} ne 'OK') {
 			# TODO: print error code
 			return;
 		}
-		if(defined($rc->{'hourly'})) {
-			return $rc;	# No support for list context, yet
-		}
+		return $rc;	# No support for list context, yet
 	}
 
 	# my @results = @{ $data || [] };
