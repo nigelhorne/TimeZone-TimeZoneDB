@@ -95,7 +95,7 @@ sub get_time_zone {
 		$param{latitude} = $location->latitude();
 		$param{longitude} = $location->longitude();
 	} elsif(ref($_[0])) {
-		Carp::croak('Usage: weather(latitude => $latitude, longitude => $logitude, date => "YYYY-MM-DD")');
+		Carp::croak('Usage: get_time_zone(latitude => $latitude, longitude => $logitude, date => "YYYY-MM-DD")');
 		return;
 	} elsif(@_ % 2 == 0) {
 		%param = @_;
@@ -150,15 +150,16 @@ Accessor method to get and set UserAgent object used internally. You
 can call I<env_proxy> for example, to get the proxy information from
 environment variables:
 
-    $meteo->ua()->env_proxy(1);
+    $tzdb->ua()->env_proxy(1);
 
-You can also set your own User-Agent object:
+Free accounts are limited to one search a second,
+so you can use L<LWP::UserAgent::Throttled> to keep within that limit.
 
     use LWP::UserAgent::Throttled;
 
     my $ua = LWP::UserAgent::Throttled->new();
-    $ua->throttle('open-meteo.com' => 1);
-    $meteo->ua($ua);
+    $ua->throttle('timezonedb.com' => 1);
+    $tzdb->ua($ua);
 
 =cut
 
@@ -177,13 +178,13 @@ Nigel Horne, C<< <njh@bandsman.co.uk> >>
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
-Lots of thanks to the folks at L<https://open-meteo.com>.
+Lots of thanks to the folks at L<https://timezonedb.com>.
 
 =head1 BUGS
 
 =head1 SEE ALSO
 
-Open Meteo API: L<https://open-meteo.com/en/docs#api_form>
+TimezoneDB API: L<https://timezonedb.com/api>
 
 =head1 LICENSE AND COPYRIGHT
 
