@@ -22,10 +22,10 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-      use TimeZone::TimeZoneDB;
+    use TimeZone::TimeZoneDB;
 
-      my $tzdb = TimeZone::TimeZoneDB->new(key => 'XXXXXXXX');
-      my $tz = $tzdb->get_time_zone({ latitude => 0.1, longitude => 0.2 });
+    my $tzdb = TimeZone::TimeZoneDB->new(key => 'XXXXXXXX');
+    my $tz = $tzdb->get_time_zone({ latitude => 0.1, longitude => 0.2 });
 
 =head1 DESCRIPTION
 
