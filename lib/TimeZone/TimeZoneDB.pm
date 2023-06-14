@@ -131,8 +131,7 @@ sub get_time_zone {
 	}
 	# $res->content_type('text/plain');	# May be needed to decode correctly
 
-	my $json = JSON::MaybeXS->new()->utf8();
-	if(my $rc = $json->decode($res->decoded_content())) {
+	if(my $rc = JSON::MaybeXS->new()->utf8()->decode($res->decoded_content())) {
 		if($rc->{'status'} ne 'OK') {
 			# TODO: print error code
 			return;
