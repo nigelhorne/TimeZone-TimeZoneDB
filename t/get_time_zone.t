@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 use Test::Most tests => 5;
-use Geo::Location::Point 0.07;	# FIXME: 0.08
+use Geo::Location::Point 0.08;
 
 BEGIN {
 	use_ok('TimeZone::TimeZoneDB');
