@@ -181,13 +181,19 @@ Lots of thanks to the folks at L<https://timezonedb.com>.
 
 =head1 BUGS
 
+Please report any bugs or feature requests to C<bug-timezone-timezonedb at rt.cpan.org>,
+or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=TimeZone-TimeZoneDB>.
+I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
 =head1 SEE ALSO
 
 TimezoneDB API: L<https://timezonedb.com/api>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2023 Nigel Horne.
+Copyright 2023-2024 Nigel Horne.
 
 This program is released under the following licence: GPL2
 
