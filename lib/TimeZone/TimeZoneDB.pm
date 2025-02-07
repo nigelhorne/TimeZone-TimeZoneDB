@@ -30,7 +30,7 @@ our $VERSION = '0.02';
 
 =head1 DESCRIPTION
 
-The `TimeZone::TimeZoneDB` Perl module provides an interface to the L<https://timezonedb.com> API,
+The C<TimeZone::TimeZoneDB> Perl module provides an interface to the L<https://timezonedb.com> API,
 enabling users to retrieve timezone data based on geographic coordinates.
 It supports configurable HTTP user agents, allowing for proxy settings and request throttling.
 The module includes robust error handling, ensuring proper validation of input parameters and secure API interactions.
