@@ -15,8 +15,26 @@ Version 0.02
 
 # DESCRIPTION
 
-TimeZone::TimeZoneDB provides an interface to timezonedb.com
-to look up timezones.
+The \`TimeZone::TimeZoneDB\` Perl module provides an interface to the [https://timezonedb.com](https://timezonedb.com) API,
+enabling users to retrieve timezone data based on geographic coordinates.
+It supports configurable HTTP user agents, allowing for proxy settings and request throttling.
+The module includes robust error handling, ensuring proper validation of input parameters and secure API interactions.
+JSON responses are safely parsed with error handling to prevent crashes.
+Designed for flexibility,
+it allows users to override default configurations while maintaining a lightweight and efficient structure for querying timezone information.
+
+- Rate-Limiting
+
+    A minimum interval between successive API calls can be enforced to ensure that the API is not overwhelmed and to comply with any request throttling requirements.
+
+    Rate-limiting is implemented using [Time::HiRes](https://metacpan.org/pod/Time%3A%3AHiRes).
+    A minimum interval between API
+    calls can be specified via the `min_interval` parameter in the constructor.
+    Before making an API call,
+    the module checks how much time has elapsed since the
+    last request and,
+    if necessary,
+    sleeps for the remaining time.
 
 # METHODS
 
@@ -28,14 +46,14 @@ to look up timezones.
     $tzdb = TimeZone::TimeZoneDB->new(ua => $ua, key => 'XXXXX');
 
     my $tz = $tzdb->tz({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
-    print "Ramsgate's timezone is $tz.\n";
+    print "Ramsgate's time zone is $tz.\n";
 
 ## get\_time\_zone
 
     use Geo::Location::Point;
 
     my $ramsgate = Geo::Location::Point->new({ latitude => 51.34, longitude => 1.42 });
-    # Find Ramsgate's timezone
+    # Find Ramsgate's time zone
     $tz = $tzdb->get_time_zone($ramsgate)->{'zoneName'}, "\n";
 
 ## ua
@@ -81,3 +99,15 @@ TimezoneDB API: [https://timezonedb.com/api](https://timezonedb.com/api)
 Copyright 2023-2024 Nigel Horne.
 
 This program is released under the following licence: GPL2
+
+# POD ERRORS
+
+Hey! **The above document had some coding errors, which are explained below:**
+
+- Around line 41:
+
+    '=item' outside of any '=over'
+
+- Around line 54:
+
+    You forgot a '=back' before '=head1'

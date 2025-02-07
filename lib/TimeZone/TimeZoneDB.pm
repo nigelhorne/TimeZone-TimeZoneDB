@@ -6,6 +6,7 @@ use warnings;
 use Carp;
 use JSON::MaybeXS;
 use LWP::UserAgent;
+use Time::HiRes;
 use URI;
 
 =head1 NAME
@@ -29,8 +30,26 @@ our $VERSION = '0.02';
 
 =head1 DESCRIPTION
 
-TimeZone::TimeZoneDB provides an interface to timezonedb.com
-to look up timezones.
+The `TimeZone::TimeZoneDB` Perl module provides an interface to the L<https://timezonedb.com> API,
+enabling users to retrieve timezone data based on geographic coordinates.
+It supports configurable HTTP user agents, allowing for proxy settings and request throttling.
+The module includes robust error handling, ensuring proper validation of input parameters and secure API interactions.
+JSON responses are safely parsed with error handling to prevent crashes.
+Designed for flexibility,
+it allows users to override default configurations while maintaining a lightweight and efficient structure for querying timezone information.
+
+=item * Rate-Limiting
+
+A minimum interval between successive API calls can be enforced to ensure that the API is not overwhelmed and to comply with any request throttling requirements.
+
+Rate-limiting is implemented using L<Time::HiRes>.
+A minimum interval between API
+calls can be specified via the C<min_interval> parameter in the constructor.
+Before making an API call,
+the module checks how much time has elapsed since the
+last request and,
+if necessary,
+sleeps for the remaining time.
 
 =head1 METHODS
 
@@ -42,11 +61,12 @@ to look up timezones.
     $tzdb = TimeZone::TimeZoneDB->new(ua => $ua, key => 'XXXXX');
 
     my $tz = $tzdb->tz({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
-    print "Ramsgate's timezone is $tz.\n";
+    print "Ramsgate's time zone is $tz.\n";
 
 =cut
 
-sub new {
+sub new
+{
 	my($class, %args) = @_;
 
 	if(!defined($class)) {
@@ -57,12 +77,7 @@ sub new {
 		return bless { %{$class}, %args }, ref($class);
 	}
 
-	my $key = $args{'key'};
-
-	if(!defined($key)) {
-		Carp::carp(__PACKAGE__, ': "key" argument not given');
-		return;
-	}
+	my $key = $args{'key'} or Carp::croak("'key' argument is required");
 
 	my $ua = $args{ua};
 	if(!defined($ua)) {
@@ -71,7 +86,17 @@ sub new {
 	}
 	my $host = $args{host} || 'api.timezonedb.com';
 
-	return bless { key => $key, ua => $ua, host => $host }, $class;
+	# Set up rate-limiting: minimum interval between requests (in seconds)
+	my $min_interval = $args{min_interval} || 0;	# default: no delay
+
+	return bless {
+		key => $key,
+		ua => $ua,
+		host => $host,
+		min_interval => $min_interval,
+		last_request => 0,	# Initialize last_request timestamp
+		%args,
+	}, $class;
 }
 
 =head2 get_time_zone
@@ -79,51 +104,61 @@ sub new {
     use Geo::Location::Point;
 
     my $ramsgate = Geo::Location::Point->new({ latitude => 51.34, longitude => 1.42 });
-    # Find Ramsgate's timezone
+    # Find Ramsgate's time zone
     $tz = $tzdb->get_time_zone($ramsgate)->{'zoneName'}, "\n";
 
 =cut
 
-sub get_time_zone {
+sub get_time_zone
+{
 	my $self = shift;
 	my %param;
 
 	if(ref($_[0]) eq 'HASH') {
 		%param = %{$_[0]};
-	} elsif((@_ == 1) && (ref($_[0]) =~ /::/) && ($_[0]->can('latitude'))) {
+	} elsif((@_ == 1) && ref($_[0]) && $_[0]->can('latitude')) {
 		my $location = $_[0];
 		$param{latitude} = $location->latitude();
 		$param{longitude} = $location->longitude();
-	} elsif(ref($_[0])) {
-		Carp::carp('Usage: get_time_zone(latitude => $latitude, longitude => $logitude)');
-		return;
-	} elsif(@_ % 2 == 0) {
+	} elsif((@_ % 2) == 0) {
 		%param = @_;
+	} else {
+		Carp::carp('Usage: get_time_zone(latitude => $latitude, longitude => $longitude)');
+		return;
 	}
 
 	my $latitude = $param{latitude};
 	my $longitude = $param{longitude};
 
 	if((!defined($latitude)) || (!defined($longitude))) {
-		Carp::carp('Usage: get_time_zone(latitude => $latitude, longitude => $logitude)');
+		Carp::carp('Usage: get_time_zone(latitude => $latitude, longitude => $longitude)');
 		return;
 	}
 
 	my $uri = URI->new("https://$self->{host}/v2.1/get-time-zone");
-	my %query_parameters = (
+
+	$uri->query_form(
 		by => 'position',
 		lat => $latitude,
 		lng => $longitude,
 		format => 'json',
 		key => $self->{'key'}
 	);
-
-	$uri->query_form(%query_parameters);
 	my $url = $uri->as_string();
 
 	# $url =~ s/%2C/,/g;
 
+	# Enforce rate-limiting: ensure at least min_interval seconds between requests.
+	my $now = time();
+	my $elapsed = $now - $self->{last_request};
+	if($elapsed < $self->{min_interval}) {
+		Time::HiRes::sleep($self->{min_interval} - $elapsed);
+	}
+
 	my $res = $self->{ua}->get($url);
+
+	# Update last_request timestamp
+	$self->{last_request} = time();
 
 	if($res->is_error()) {
 		Carp::croak("$url API returned error: ", $res->status_line());
@@ -131,13 +166,18 @@ sub get_time_zone {
 	}
 	# $res->content_type('text/plain');	# May be needed to decode correctly
 
-	if(my $rc = JSON::MaybeXS->new()->utf8()->decode($res->decoded_content())) {
-		if($rc->{'status'} ne 'OK') {
-			# TODO: print error code
-			return;
-		}
-		return $rc;	# No support for list context, yet
+	my $rc;
+	eval { $rc = JSON::MaybeXS->new()->utf8()->decode($res->decoded_content()) };
+	if ($@) {
+		Carp::carp("Failed to parse JSON response: $@");
+		return;
 	}
+
+	if($rc && defined($rc->{'status'}) && ($rc->{'status'} ne 'OK')) {
+		# TODO: print error code
+		return;
+	}
+	return $rc;	# No support for list context, yet
 
 	# my @results = @{ $data || [] };
 	# wantarray ? @results : $results[0];
