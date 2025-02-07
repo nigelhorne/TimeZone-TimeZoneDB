@@ -137,6 +137,7 @@ sub get_time_zone
 
 	my $uri = URI->new("https://$self->{host}/v2.1/get-time-zone");
 
+	# Note - we have to pass in the key in the URL, as the API doesn't support the Authorization header
 	$uri->query_form(
 		by => 'position',
 		lat => $latitude,
@@ -145,6 +146,10 @@ sub get_time_zone
 		key => $self->{'key'}
 	);
 	my $url = $uri->as_string();
+
+	# # Set up HTTP headers
+	# my $req = HTTP::Request->new(GET => $url);
+	# $req->header('Authorization' => "Bearer $self->{key}");
 
 	# $url =~ s/%2C/,/g;
 
@@ -156,6 +161,7 @@ sub get_time_zone
 	}
 
 	my $res = $self->{ua}->get($url);
+	# my $res = $self->{ua}->request($req);
 
 	# Update last_request timestamp
 	$self->{last_request} = time();

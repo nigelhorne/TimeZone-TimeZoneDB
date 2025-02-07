@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use Geo::Location::Point;
 use Time::HiRes qw(time);
-use Test::Most;
+use Test::Most tests => 4;
 
 BEGIN { use_ok('TimeZone::TimeZoneDB') }
 
@@ -14,10 +14,10 @@ RATE_LIMIT: {
 	SKIP: {
 		if(!$ENV{'TIMEZONEDB_KEY'}) {
 			diag('Set TIMEZONEDB_KEY for your API key to timezonedb.com');
-			skip('Set TIMEZONEDB_KEY for your API key to timezonedb.com', 4);
+			skip('Set TIMEZONEDB_KEY for your API key to timezonedb.com', 3);
 		} elsif(!-e 't/online.enabled') {
 			diag('Test requires Internet access');
-			skip('Test requires Internet access', 4);
+			skip('Test requires Internet access', 3);
 		}
 
 		# --- Create a custom LWP::UserAgent for testing ---
@@ -71,7 +71,5 @@ RATE_LIMIT: {
 			my $elapsed = $MyTestUA::REQUEST_TIMES[1] - $MyTestUA::REQUEST_TIMES[0];
 			cmp_ok($elapsed, '>=', $min_interval, "Rate limiting enforced: elapsed time >= $min_interval sec");
 		}
-
-		done_testing();
 	}
 }
