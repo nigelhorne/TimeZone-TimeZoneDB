@@ -16,11 +16,11 @@ TimeZone::TimeZoneDB - Interface to L<https://timezonedb.com> for looking up Tim
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -38,6 +38,8 @@ The module includes robust error handling, ensuring proper validation of input p
 JSON responses are safely parsed with error handling to prevent crashes.
 Designed for flexibility,
 it allows users to override default configurations while maintaining a lightweight and efficient structure for querying timezone information.
+
+=over 4
 
 =item * Caching
 
@@ -63,6 +65,8 @@ the module checks how much time has elapsed since the
 last request and,
 if necessary,
 sleeps for the remaining time.
+
+=back
 
 =head1 METHODS
 
@@ -269,7 +273,7 @@ TimezoneDB API: L<https://timezonedb.com/api>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2023-2024 Nigel Horne.
+Copyright 2023-2025 Nigel Horne.
 
 This program is released under the following licence: GPL2
 

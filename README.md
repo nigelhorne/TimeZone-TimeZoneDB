@@ -4,7 +4,7 @@ TimeZone::TimeZoneDB - Interface to [https://timezonedb.com](https://timezonedb.
 
 # VERSION
 
-Version 0.02
+Version 0.03
 
 # SYNOPSIS
 
@@ -15,13 +15,25 @@ Version 0.02
 
 # DESCRIPTION
 
-The \`TimeZone::TimeZoneDB\` Perl module provides an interface to the [https://timezonedb.com](https://timezonedb.com) API,
+The `TimeZone::TimeZoneDB` Perl module provides an interface to the [https://timezonedb.com](https://timezonedb.com) API,
 enabling users to retrieve timezone data based on geographic coordinates.
 It supports configurable HTTP user agents, allowing for proxy settings and request throttling.
 The module includes robust error handling, ensuring proper validation of input parameters and secure API interactions.
 JSON responses are safely parsed with error handling to prevent crashes.
 Designed for flexibility,
 it allows users to override default configurations while maintaining a lightweight and efficient structure for querying timezone information.
+
+- Caching
+
+    Identical requests are cached (using [CHI](https://metacpan.org/pod/CHI) or a user-supplied caching object),
+    reducing the number of HTTP requests to the API and speeding up repeated queries.
+
+    This module leverages [CHI](https://metacpan.org/pod/CHI) for caching geocoding responses.
+    When a geocode request is made,
+    a cache key is constructed from the request.
+    If a cached response exists,
+    it is returned immediately,
+    avoiding unnecessary API calls.
 
 - Rate-Limiting
 
@@ -96,18 +108,6 @@ TimezoneDB API: [https://timezonedb.com/api](https://timezonedb.com/api)
 
 # LICENSE AND COPYRIGHT
 
-Copyright 2023-2024 Nigel Horne.
+Copyright 2023-2025 Nigel Horne.
 
 This program is released under the following licence: GPL2
-
-# POD ERRORS
-
-Hey! **The above document had some coding errors, which are explained below:**
-
-- Around line 41:
-
-    '=item' outside of any '=over'
-
-- Around line 54:
-
-    You forgot a '=back' before '=head1'

@@ -15,7 +15,7 @@ BEGIN { use_ok('TimeZone::TimeZoneDB') }
 my $mock_ua = Test::MockModule->new('LWP::UserAgent');
 $mock_ua->mock(get => sub {
 	my ($self, $url) = @_;
-	
+
 	# Simulated API response
 	my $response = HTTP::Response->new(200);
 	$response->content('{"status":"OK","zoneName":"America/New_York"}');
