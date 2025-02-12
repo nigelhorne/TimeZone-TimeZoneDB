@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Carp;
+use CHI;
 use JSON::MaybeXS;
 use LWP::UserAgent;
 use Time::HiRes;
@@ -37,6 +38,18 @@ The module includes robust error handling, ensuring proper validation of input p
 JSON responses are safely parsed with error handling to prevent crashes.
 Designed for flexibility,
 it allows users to override default configurations while maintaining a lightweight and efficient structure for querying timezone information.
+
+=item * Caching
+
+Identical requests are cached (using L<CHI> or a user-supplied caching object),
+reducing the number of HTTP requests to the API and speeding up repeated queries.
+
+This module leverages L<CHI> for caching geocoding responses.
+When a geocode request is made,
+a cache key is constructed from the request.
+If a cached response exists,
+it is returned immediately,
+avoiding unnecessary API calls.
 
 =item * Rate-Limiting
 
@@ -86,6 +99,13 @@ sub new
 	}
 	my $host = $args{host} || 'api.timezonedb.com';
 
+	# Set up caching (default to an in-memory cache if none provided)
+	my $cache = $args{cache} || CHI->new(
+		driver => 'Memory',
+		global => 1,
+		expires_in => '1 hour',
+	);
+
 	# Set up rate-limiting: minimum interval between requests (in seconds)
 	my $min_interval = $args{min_interval} || 0;	# default: no delay
 
@@ -93,6 +113,7 @@ sub new
 		key => $key,
 		ua => $ua,
 		host => $host,
+		cache => $cache,
 		min_interval => $min_interval,
 		last_request => 0,	# Initialize last_request timestamp
 		%args,
@@ -153,6 +174,12 @@ sub get_time_zone
 
 	# $url =~ s/%2C/,/g;
 
+	# Create a cache key based on the location (might want to use a stronger hash function if needed)
+	my $cache_key = "tz:$latitude:$longitude";
+	if(my $cached = $self->{cache}->get($cache_key)) {
+		return $cached;
+	}
+
 	# Enforce rate-limiting: ensure at least min_interval seconds between requests.
 	my $now = time();
 	my $elapsed = $now - $self->{last_request};
@@ -174,10 +201,13 @@ sub get_time_zone
 
 	my $rc;
 	eval { $rc = JSON::MaybeXS->new()->utf8()->decode($res->decoded_content()) };
-	if ($@) {
+	if($@) {
 		Carp::carp("Failed to parse JSON response: $@");
 		return;
 	}
+
+	# Cache the result before returning it
+	$self->{cache}->set($cache_key, $rc);
 
 	if($rc && defined($rc->{'status'}) && ($rc->{'status'} ne 'OK')) {
 		# TODO: print error code

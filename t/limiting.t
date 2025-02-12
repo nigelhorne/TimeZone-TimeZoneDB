@@ -4,9 +4,10 @@
 
 use strict;
 use warnings;
+use CHI;
 use Geo::Location::Point;
 use Time::HiRes qw(time);
-use Test::Most tests => 4;
+use Test::Most tests => 5;
 
 BEGIN { use_ok('TimeZone::TimeZoneDB') }
 
@@ -49,23 +50,34 @@ RATE_LIMIT: {
 		# Create our custom user agent
 		my $ua = MyTestUA->new();
 
-		# Instantiate with our custom UA, cache, and min_interval
+		# Create an in-memory cache using CHI
+		my $cache = CHI->new(
+			driver => 'Memory',
+			global => 1,
+			expires_in => '1 hour',
+		);
+
+		# Instantiate with our custom UA and min_interval
 		my $tzdb = TimeZone::TimeZoneDB->new(
 			key => $ENV{'TIMEZONEDB_KEY'},
 			min_interval => $min_interval,
 			ua => $ua,
+			cache => $cache
 		);
 
 		my $leesburg = Geo::Location::Point->new({ latitude => 39.1155, longitude => -77.5644 });
-		# Find Leesburg's time zone, twice
+		# Find two timezones
 		my $tz = $tzdb->get_time_zone($leesburg)->{'zoneName'};
-		$tz = $tzdb->get_time_zone($leesburg)->{'zoneName'};
+		my $ramsgate = Geo::Location::Point->new({ latitude => 51.34, longitude => 1.42 });
+		$tz = $tzdb->get_time_zone($ramsgate)->{'zoneName'};
 
 		# Verify that the rate limiting was enforced by comparing the timestamps of
 		# the two API calls. There should now be two entries in @MyTestUA::REQUEST_TIMES.
 		my $num_requests = scalar @MyTestUA::REQUEST_TIMES;
 		ok($num_requests >= 2, 'At least two API requests have been made');
 		cmp_ok($num_requests, '==', $MyTestUA::REQUEST_COUNT);
+
+		ok($cache->get('tz:51.34:1.42'));
 
 		if($num_requests >= 2) {
 			my $elapsed = $MyTestUA::REQUEST_TIMES[1] - $MyTestUA::REQUEST_TIMES[0];

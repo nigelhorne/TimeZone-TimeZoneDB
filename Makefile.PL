@@ -64,6 +64,7 @@ WriteMakefile(
 	PL_FILES	=> {},
 	TEST_REQUIRES => $test_requires,
 	PREREQ_PM => {
+		'CHI' => 0,
 		'Encode' => 0,
 		'ExtUtils::MakeMaker' => 6.64,	# for TEST_REQUIRES
 		'JSON::MaybeXS' => 0,
