@@ -74,5 +74,5 @@ RATE_LIMIT: {
 		cmp_ok($elapsed, '>=', $min_interval, "Rate limiting enforced: elapsed time >= $min_interval sec");
 	}
 
-	ok($cache->get('tz:51.34:1.42'));
+	cmp_ok(ref($cache->get('tz:51.34:1.42')), 'eq', 'HASH');
 }
