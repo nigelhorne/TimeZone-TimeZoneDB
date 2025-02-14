@@ -80,6 +80,34 @@ sleeps for the remaining time.
     my $tz = $tzdb->tz({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
     print "Ramsgate's time zone is $tz.\n";
 
+Creates a new instance. Acceptable options include:
+
+=over 4
+
+=item * C<ua>
+
+An object to use for HTTP requests.
+If not provided, a default user agent is created.
+
+=item * C<host>
+
+The API host endpoint.
+Defaults to L<https://api.timezonedb.com>
+
+=item * C<cache>
+
+A caching object.
+If not provided,
+an in-memory cache is created with a default expiration of one hour.
+
+=item * C<min_interval>
+
+Minimum number of seconds to wait between API requests.
+Defaults to C<0> (no delay).
+Use this option to enforce rate-limiting.
+
+=back
+
 =cut
 
 sub new
@@ -115,12 +143,12 @@ sub new
 
 	return bless {
 		key => $key,
-		ua => $ua,
-		host => $host,
-		cache => $cache,
 		min_interval => $min_interval,
 		last_request => 0,	# Initialize last_request timestamp
 		%args,
+		cache => $cache,
+		host => $host,
+		ua => $ua,
 	}, $class;
 }
 
@@ -184,7 +212,7 @@ sub get_time_zone
 		return $cached;
 	}
 
-	# Enforce rate-limiting: ensure at least min_interval seconds between requests.
+	# Enforce rate-limiting: ensure at least min_interval seconds between requests
 	my $now = time();
 	my $elapsed = $now - $self->{last_request};
 	if($elapsed < $self->{min_interval}) {
@@ -211,7 +239,7 @@ sub get_time_zone
 	}
 
 	# Cache the result before returning it
-	$self->{cache}->set($cache_key, $rc);
+	$self->{'cache'}->set($cache_key, $rc);
 
 	if($rc && defined($rc->{'status'}) && ($rc->{'status'} ne 'OK')) {
 		# TODO: print error code
@@ -260,6 +288,8 @@ it under the same terms as Perl itself.
 Lots of thanks to the folks at L<https://timezonedb.com>.
 
 =head1 BUGS
+
+This module is provided as-is without any warranty.
 
 Please report any bugs or feature requests to C<bug-timezone-timezonedb at rt.cpan.org>,
 or through the web interface at

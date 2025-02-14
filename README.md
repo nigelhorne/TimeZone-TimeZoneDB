@@ -60,6 +60,30 @@ it allows users to override default configurations while maintaining a lightweig
     my $tz = $tzdb->tz({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
     print "Ramsgate's time zone is $tz.\n";
 
+Creates a new instance. Acceptable options include:
+
+- `ua`
+
+    An object to use for HTTP requests.
+    If not provided, a default user agent is created.
+
+- `host`
+
+    The API host endpoint.
+    Defaults to [https://api.timezonedb.com](https://api.timezonedb.com)
+
+- `cache`
+
+    A caching object.
+    If not provided,
+    an in-memory cache is created with a default expiration of one hour.
+
+- `min_interval`
+
+    Minimum number of seconds to wait between API requests.
+    Defaults to `0` (no delay).
+    Use this option to enforce rate-limiting.
+
 ## get\_time\_zone
 
     use Geo::Location::Point;
@@ -95,6 +119,8 @@ it under the same terms as Perl itself.
 Lots of thanks to the folks at [https://timezonedb.com](https://timezonedb.com).
 
 # BUGS
+
+This module is provided as-is without any warranty.
 
 Please report any bugs or feature requests to `bug-timezone-timezonedb at rt.cpan.org`,
 or through the web interface at
