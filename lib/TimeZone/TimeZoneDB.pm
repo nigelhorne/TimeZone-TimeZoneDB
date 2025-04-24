@@ -170,7 +170,7 @@ sub get_time_zone
 
 	if(ref($_[0]) eq 'HASH') {
 		%param = %{$_[0]};
-	} elsif((@_ == 1) && ref($_[0]) && $_[0]->can('latitude')) {
+	} elsif((@_ == 1) && Scalar::Util::blessed($_[0]) && $_[0]->can('latitude')) {
 		my $location = $_[0];
 		$param{latitude} = $location->latitude();
 		$param{longitude} = $location->longitude();
