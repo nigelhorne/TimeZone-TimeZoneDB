@@ -7,6 +7,7 @@ use Carp;
 use CHI;
 use JSON::MaybeXS;
 use LWP::UserAgent;
+use Scalar::Util;
 use Time::HiRes;
 use URI;
 
@@ -117,8 +118,8 @@ sub new
 	if(!defined($class)) {
 		# TimeZone::TimeZoneDB::new() used rather than TimeZone::TimeZoneDB->new()
 		$class = __PACKAGE__;
-	} elsif(ref($class)) {
-		# clone the given object
+	} elsif(Scalar::Util::blessed($class)) {
+		# If $class is an object, clone it with new arguments
 		return bless { %{$class}, %args }, ref($class);
 	}
 
