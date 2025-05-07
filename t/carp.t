@@ -2,14 +2,14 @@
 
 use strict;
 use warnings;
+
 use Test::Most;
+use Test::Needs 'Test::Carp';
 
 CARP: {
-	eval 'use Test::Carp';
+	Test::Carp->import();
 
-	if($@) {
-		plan(skip_all => 'Test::Carp needed to check error messages');
-	} elsif(!$ENV{'TIMEZONEDB_KEY'}) {
+	if(!$ENV{'TIMEZONEDB_KEY'}) {
 		plan(skip_all => 'Set TIMEZONEDB_KEY for your API key to timezonedb.com');
 	} else {
 		plan(tests => 6);
