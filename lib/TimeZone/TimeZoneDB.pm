@@ -7,6 +7,8 @@ use Carp;
 use CHI;
 use JSON::MaybeXS;
 use LWP::UserAgent;
+use Object::Configure;
+use Params::Get;
 use Scalar::Util;
 use Time::HiRes;
 use URI;
@@ -113,40 +115,43 @@ Use this option to enforce rate-limiting.
 
 sub new
 {
-	my($class, %args) = @_;
+	my $class = shift;
+	my $params = Params::Get::get_params(undef, \@_) || {};
 
 	if(!defined($class)) {
 		# TimeZone::TimeZoneDB::new() used rather than TimeZone::TimeZoneDB->new()
 		$class = __PACKAGE__;
 	} elsif(Scalar::Util::blessed($class)) {
 		# If $class is an object, clone it with new arguments
-		return bless { %{$class}, %args }, ref($class);
+		return bless { %{$class}, %{$params} }, ref($class);
 	}
 
-	my $key = $args{'key'} or Carp::croak("'key' argument is required");
+	$params = Object::Configure::configure($class, $params);	# Reads in the runtime configuration settings
 
-	my $ua = $args{ua};
+	my $key = $params->{'key'} or Carp::croak("'key' argument is required");
+
+	my $ua = $params->{ua};
 	if(!defined($ua)) {
 		$ua = LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 		$ua->default_header(accept_encoding => 'gzip,deflate');
 	}
-	my $host = $args{host} || 'api.timezonedb.com';
+	my $host = $params->{host} || 'api.timezonedb.com';
 
 	# Set up caching (default to an in-memory cache if none provided)
-	my $cache = $args{cache} || CHI->new(
+	my $cache = $params->{cache} || CHI->new(
 		driver => 'Memory',
 		global => 1,
 		expires_in => '1 day',
 	);
 
 	# Set up rate-limiting: minimum interval between requests (in seconds)
-	my $min_interval = $args{min_interval} || 0;	# default: no delay
+	my $min_interval = $params->{min_interval} || 0;	# default: no delay
 
 	return bless {
 		key => $key,
 		min_interval => $min_interval,
 		last_request => 0,	# Initialize last_request timestamp
-		%args,
+		%{$params},
 		cache => $cache,
 		host => $host,
 		ua => $ua,

@@ -9,6 +9,8 @@ on:
     tags-ignore:
       - '*'
   pull_request:
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -43,3 +45,8 @@ jobs:
         run: prove -l -b t
         env:
           AUTHOR_TESTING: 1
+
+      - name: Show cpanm build log on failure (Windows)
+        if: runner.os == 'Windows' && failure()
+        shell: pwsh
+        run: Get-Content "$env:USERPROFILE\.cpanm\work\*\build.log" -Tail 100
