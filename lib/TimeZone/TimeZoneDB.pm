@@ -171,23 +171,18 @@ sub new
 sub get_time_zone
 {
 	my $self = shift;
-	my %param;
+	my $params;
 
-	if(ref($_[0]) eq 'HASH') {
-		%param = %{$_[0]};
-	} elsif((@_ == 1) && Scalar::Util::blessed($_[0]) && $_[0]->can('latitude')) {
+	if((@_ == 1) && Scalar::Util::blessed($_[0]) && $_[0]->can('latitude')) {
 		my $location = $_[0];
-		$param{latitude} = $location->latitude();
-		$param{longitude} = $location->longitude();
-	} elsif((@_ % 2) == 0) {
-		%param = @_;
+		$params->{latitude} = $location->latitude();
+		$params->{longitude} = $location->longitude();
 	} else {
-		Carp::carp('Usage: get_time_zone(latitude => $latitude, longitude => $longitude)');
-		return;
+		$params = Params::Get::get_params(undef, \@_);
 	}
 
-	my $latitude = $param{latitude};
-	my $longitude = $param{longitude};
+	my $latitude = $params->{latitude};
+	my $longitude = $params->{longitude};
 
 	if((!defined($latitude)) || (!defined($longitude))) {
 		Carp::carp('Usage: get_time_zone(latitude => $latitude, longitude => $longitude)');

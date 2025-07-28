@@ -2,6 +2,7 @@ Revision history for TimeZone::TimeZoneDB
 
 0.04
 	Use Object::Configure
+	More use of Params::Get
 
 0.03	Wed Feb 12 07:36:10 EST 2025
 	Added rate-limiting and caching support
