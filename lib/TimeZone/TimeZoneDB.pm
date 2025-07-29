@@ -161,6 +161,8 @@ sub new
 
 =head2 get_time_zone
 
+Returns a hashref with at least one key (the zoneName)
+
     use Geo::Location::Point;
 
     my $ramsgate = Geo::Location::Point->new({ latitude => 51.34, longitude => 1.42 });
@@ -247,6 +249,8 @@ sub get_time_zone
 		# TODO: print error code
 		return;
 	}
+
+	# Assert output: a hashref with at least one key (the zoneName)
 	return Return::Set::set_return($rc, { 'type' => 'hashref', 'min' => 1 });	# No support for list context, yet
 
 	# my @results = @{ $data || [] };
