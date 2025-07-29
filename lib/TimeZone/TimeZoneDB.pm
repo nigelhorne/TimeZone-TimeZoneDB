@@ -9,6 +9,7 @@ use JSON::MaybeXS;
 use LWP::UserAgent;
 use Object::Configure;
 use Params::Get;
+use Return::Set;
 use Scalar::Util;
 use Time::HiRes;
 use URI;
@@ -246,7 +247,7 @@ sub get_time_zone
 		# TODO: print error code
 		return;
 	}
-	return $rc;	# No support for list context, yet
+	return Return::Set::set_return($rc, { 'type' => 'hashref', 'min' => 1 });	# No support for list context, yet
 
 	# my @results = @{ $data || [] };
 	# wantarray ? @results : $results[0];

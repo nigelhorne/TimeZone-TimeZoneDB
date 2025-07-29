@@ -72,6 +72,7 @@ WriteMakefile(
 		'LWP::Protocol::https' => 0,
 		'Object::Configure' => 0,
 		'Params::Get' => 0,
+		'Return::Set' => 0,
 		'Scalar::Util' => 0,
 		'Time::HiRes' => 0,
 		'URI' => 0,
