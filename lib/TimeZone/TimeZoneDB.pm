@@ -8,7 +8,8 @@ use CHI;
 use JSON::MaybeXS;
 use LWP::UserAgent;
 use Object::Configure;
-use Params::Get;
+use Params::Get 0.13;
+use Params::Validate::Strict 0.10;
 use Return::Set;
 use Scalar::Util;
 use Time::HiRes;
@@ -183,6 +184,14 @@ sub get_time_zone
 	} else {
 		$params = Params::Get::get_params(undef, \@_);
 	}
+
+	$params = Params::Validate::Strict::validate_strict(
+		args => $params,
+		schema => {
+			'latitude' => { type => 'number', min => -180, max => 180 },
+			'longitude' => { type => 'number', min => -180, max => 180 },
+		}
+	);
 
 	my $latitude = $params->{latitude};
 	my $longitude = $params->{longitude};
