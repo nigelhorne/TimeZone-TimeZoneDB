@@ -175,7 +175,7 @@ Returns a hashref with at least one key (the zoneName)
 =head4	INPUT
 
   {
-    'latitude' => { type => 'number', min => -180, max => 180 },
+    'latitude' => { type => 'number', min => -90, max => 90 },
     'longitude' => { type => 'number', min => -180, max => 180 },
   }
 
@@ -207,7 +207,7 @@ sub get_time_zone
 	$params = Params::Validate::Strict::validate_strict(
 		args => $params,
 		schema => {
-			'latitude' => { type => 'number', min => -180, max => 180 },
+			'latitude' => { type => 'number', min => -90, max => 90 },
 			'longitude' => { type => 'number', min => -180, max => 180 },
 		}
 	);
