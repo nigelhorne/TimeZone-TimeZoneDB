@@ -99,7 +99,7 @@ Returns a hashref with at least one key (the zoneName)
 #### INPUT
 
     {
-      'latitude' => { type => 'number', min => -180, max => 180 },
+      'latitude' => { type => 'number', min => -90, max => 90 },
       'longitude' => { type => 'number', min => -180, max => 180 },
     }
 
