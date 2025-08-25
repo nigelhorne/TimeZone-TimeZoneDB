@@ -170,6 +170,25 @@ Returns a hashref with at least one key (the zoneName)
     # Find Ramsgate's time zone
     $tz = $tzdb->get_time_zone($ramsgate)->{'zoneName'}, "\n";
 
+=head3	FORMAL SPECIFICATION
+
+=head4	INPUT
+
+  {
+    'latitude' => { type => 'number', min => -180, max => 180 },
+    'longitude' => { type => 'number', min => -180, max => 180 },
+  }
+
+=head4	OUTPUT
+
+Argument error: croak
+No matches found: undef
+
+  {
+    'type' => 'hashref',
+    'min' => 1
+  }
+
 =cut
 
 sub get_time_zone

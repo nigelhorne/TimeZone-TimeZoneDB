@@ -86,11 +86,32 @@ Creates a new instance. Acceptable options include:
 
 ## get\_time\_zone
 
+Returns a hashref with at least one key (the zoneName)
+
     use Geo::Location::Point;
 
     my $ramsgate = Geo::Location::Point->new({ latitude => 51.34, longitude => 1.42 });
     # Find Ramsgate's time zone
     $tz = $tzdb->get_time_zone($ramsgate)->{'zoneName'}, "\n";
+
+### FORMAL SPECIFICATION
+
+#### INPUT
+
+    {
+      'latitude' => { type => 'number', min => -180, max => 180 },
+      'longitude' => { type => 'number', min => -180, max => 180 },
+    }
+
+#### OUTPUT
+
+Argument error: croak
+No matches found: undef
+
+    {
+      'type' => 'hashref',
+      'min' => 1
+    }
 
 ## ua
 
