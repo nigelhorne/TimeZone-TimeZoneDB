@@ -82,7 +82,7 @@ sleeps for the remaining time.
     $ua->env_proxy(1);
     $tzdb = TimeZone::TimeZoneDB->new(ua => $ua, key => 'XXXXX');
 
-    my $tz = $tzdb->tz({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
+    my $tz = $tzdb->get_time_zone({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
     print "Ramsgate's time zone is $tz.\n";
 
 Creates a new instance. Acceptable options include:
@@ -103,7 +103,7 @@ Defaults to L<https://api.timezonedb.com>
 
 A caching object.
 If not provided,
-an in-memory cache is created with a default expiration of one hour.
+an in-memory cache is created with a default expiration of one day.
 
 =item * C<min_interval>
 
@@ -142,7 +142,7 @@ sub new
 	# Set up caching (default to an in-memory cache if none provided)
 	my $cache = $params->{cache} || CHI->new(
 		driver => 'Memory',
-		global => 1,
+		global => 0,
 		expires_in => '1 day',
 	);
 
@@ -170,7 +170,7 @@ Returns a hashref with at least one key (the zoneName)
     # Find Ramsgate's time zone
     $tz = $tzdb->get_time_zone($ramsgate)->{'zoneName'}, "\n";
 
-=head3	FORMAL SPECIFICATION
+=head3	API SPECIFICATION
 
 =head4	INPUT
 
@@ -239,7 +239,8 @@ sub get_time_zone
 	# $url =~ s/%2C/,/g;
 
 	# Create a cache key based on the location (might want to use a stronger hash function if needed)
-	my $cache_key = "tz:$latitude:$longitude";
+	# Normalize the key so that 0.1 vs 0.1000000 use the same key
+	my $cache_key = sprintf('tz:%.6f:%.6f', $latitude, $longitude);
 	if(my $cached = $self->{cache}->get($cache_key)) {
 		return $cached;
 	}
@@ -274,7 +275,9 @@ sub get_time_zone
 	$self->{'cache'}->set($cache_key, $rc);
 
 	if($rc && defined($rc->{'status'}) && ($rc->{'status'} ne 'OK')) {
-		# TODO: print error code
+		if(my $logger = $self->{'logger'}) {
+			$logger->warn(__PACKAGE__, ": $url returns $rc->{status}");
+		}
 		return;
 	}
 

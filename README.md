@@ -57,7 +57,7 @@ it allows users to override default configurations while maintaining a lightweig
     $ua->env_proxy(1);
     $tzdb = TimeZone::TimeZoneDB->new(ua => $ua, key => 'XXXXX');
 
-    my $tz = $tzdb->tz({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
+    my $tz = $tzdb->get_time_zone({ latitude => 51.34, longitude => 1.42 })->{'zoneName'};
     print "Ramsgate's time zone is $tz.\n";
 
 Creates a new instance. Acceptable options include:
@@ -76,7 +76,7 @@ Creates a new instance. Acceptable options include:
 
     A caching object.
     If not provided,
-    an in-memory cache is created with a default expiration of one hour.
+    an in-memory cache is created with a default expiration of one day.
 
 - `min_interval`
 
@@ -94,7 +94,7 @@ Returns a hashref with at least one key (the zoneName)
     # Find Ramsgate's time zone
     $tz = $tzdb->get_time_zone($ramsgate)->{'zoneName'}, "\n";
 
-### FORMAL SPECIFICATION
+### API SPECIFICATION
 
 #### INPUT
 
