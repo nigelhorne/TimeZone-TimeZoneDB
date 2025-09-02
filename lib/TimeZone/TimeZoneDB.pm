@@ -336,7 +336,13 @@ automatically be notified of progress on your bug as I make changes.
 
 =head1 SEE ALSO
 
-TimezoneDB API: L<https://timezonedb.com/api>
+=over 4
+
+=item * TimezoneDB API: L<https://timezonedb.com/api>
+
+=item * Testing Dashboard: L<https://nigelhorne.github.io/TimeZone-TimeZoneDB/coverage/>
+
+=back
 
 =head1 LICENSE AND COPYRIGHT
 

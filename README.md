@@ -151,7 +151,8 @@ automatically be notified of progress on your bug as I make changes.
 
 # SEE ALSO
 
-TimezoneDB API: [https://timezonedb.com/api](https://timezonedb.com/api)
+- TimezoneDB API: [https://timezonedb.com/api](https://timezonedb.com/api)
+- Testing Dashboard: [https://nigelhorne.github.io/TimeZone-TimeZoneDB/coverage/](https://nigelhorne.github.io/TimeZone-TimeZoneDB/coverage/)
 
 # LICENSE AND COPYRIGHT
 
