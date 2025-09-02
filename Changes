@@ -7,6 +7,7 @@ Revision history for TimeZone::TimeZoneDB
 	Normalize cache key to avoid missed cache opportunities
 	Fix docs which had a couple of small mistakes
 	Don't use global in CHI memory - safer for threading
+	Added test dashboard to GitHub Pages
 
 0.03	Wed Feb 12 07:36:10 EST 2025
 	Added rate-limiting and caching support
