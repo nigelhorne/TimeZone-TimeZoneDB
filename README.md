@@ -4,7 +4,7 @@ TimeZone::TimeZoneDB - Interface to [https://timezonedb.com](https://timezonedb.
 
 # VERSION
 
-Version 0.03
+Version 0.04
 
 # SYNOPSIS
 

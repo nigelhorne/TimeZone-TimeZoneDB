@@ -1,6 +1,6 @@
 Revision history for TimeZone::TimeZoneDB
 
-0.04
+0.04	Wed Sep  3 07:42:27 EDT 2025
 	Use Object::Configure
 	More use of Params::Get
 	Use Return::Set and Params::Validate::Strict
