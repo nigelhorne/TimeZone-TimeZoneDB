@@ -27,16 +27,16 @@ https://pjcj.net
 <tr><th>line</th><th>%</th><th colspan="2">coverage</th><th>branch</th></tr>
 <tr><td class="h"><a id="L123">123</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (not defined $class) { }</td></tr>
 <tr><td class="h"></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">elsif (&amp;Scalar::Util::blessed($class)) { }</td></tr>
-<tr><td class="h"><a id="L133">133</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless my $key = $$params{&quot;key&quot;}</td></tr>
+<tr><td class="h"><a id="L133">133</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless my $key = $params-&gt;{&#39;key&#39;}</td></tr>
 <tr><td class="h"><a id="L136">136</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (defined $ua)</td></tr>
 <tr><td class="h"><a id="L199">199</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@_ == 1 and &amp;Scalar::Util::blessed($_[0]) and $_[0]-&gt;can(&#39;latitude&#39;)) { }</td></tr>
 <tr><td class="h"><a id="L218">218</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless (defined $latitude and defined $longitude)</td></tr>
-<tr><td class="h"><a id="L244">244</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (my $cached = $$self{&quot;cache&quot;}-&gt;get($cache_key))</td></tr>
-<tr><td class="h"><a id="L251">251</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($elapsed &lt; $$self{&quot;min_interval&quot;})</td></tr>
+<tr><td class="h"><a id="L244">244</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (my $cached = $self-&gt;{&#39;cache&#39;}-&gt;get($cache_key))</td></tr>
+<tr><td class="h"><a id="L251">251</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($elapsed &lt; $self-&gt;{&#39;min_interval&#39;})</td></tr>
 <tr><td class="h"><a id="L261">261</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($res-&gt;is_error)</td></tr>
 <tr><td class="h"><a id="L269">269</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($@)</td></tr>
-<tr><td class="h"><a id="L277">277</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($rc and defined $$rc{&quot;status&quot;} and $$rc{&quot;status&quot;} ne &quot;OK&quot;)</td></tr>
-<tr><td class="h"><a id="L278">278</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (my $logger = $$self{&quot;logger&quot;})</td></tr>
+<tr><td class="h"><a id="L277">277</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($rc and defined $rc-&gt;{&#39;status&#39;} and $rc-&gt;{&#39;status&#39;} ne &quot;OK&quot;)</td></tr>
+<tr><td class="h"><a id="L278">278</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (my $logger = $self-&gt;{&#39;logger&#39;})</td></tr>
 <tr><td class="h"><a id="L312">312</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if (@_)</td></tr>
 </table>
 </body>
