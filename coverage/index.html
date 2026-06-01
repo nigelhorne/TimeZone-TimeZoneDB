@@ -39,6 +39,94 @@
 		td.positive { color: green; font-weight: bold; }
 		td.negative { color: red; font-weight: bold; }
 		td.neutral { color: gray; }
+		/* Show cursor points on the headers to show that they are clickable */
+		th { background-color: #f2f2f2; cursor: pointer; }
+		th.sortable {
+			cursor: pointer;
+			user-select: none;
+			white-space: nowrap;
+		}
+		th .arrow {
+			color: #aaa;	/* dimmed for inactive */
+			font-weight: normal;
+		}
+		th .arrow.active {
+			color: #000;	/* dark for active */
+			font-weight: bold;
+		}
+		.sparkline {
+			display: inline-block;
+			vertical-align: middle;
+		}
+		tr.cpan-fail td {
+			background-color: #fdd;
+		}
+		tr.cpan-unknown td {
+			background-color: #eee;
+			color: #666;
+		}
+		tr.cpan-na td {
+			background-color: #ffffde;
+			color: #666;
+		}
+		.new-failure {
+			background: #c00;
+			color: #fff;
+			font-weight: bold;
+			padding: 2px 6px;
+			border-radius: 4px;
+			font-size: 0.85em;
+		}
+		.notice {
+			padding: 8px 12px;
+			margin: 10px 0;
+			border-radius: 4px;
+			font-size: 0.95em;
+		}
+		.notice strong {
+			font-weight: bold;
+		}
+		.notice.perl-version-cliff {
+			background-color: #fff3cd; /* soft amber */
+			border: 1px solid #ffeeba;
+			color: #856404;
+		}
+		.notice.perl-version-cliff a {
+			color: #533f03;
+			text-decoration: underline;
+		}
+		.notice.perl-version-cliff a:hover {
+			text-decoration: none;
+		}
+		.notice.locale-cliff {
+			border-left: 4px solid #d97706;
+			background: #fffbeb;
+			padding: 0.5em 1em;
+		}
+		.notice.rt-issues {
+			background: #fff6e5;
+			border-left: 4px solid #d9822b;
+		}
+		table.root-causes {
+			border-collapse: collapse;
+			width: 100%;
+			margin-bottom: 1.5em;
+		}
+		table.root-causes th,
+		table.root-causes td {
+			border: 1px solid #ccc;
+			padding: 8px;
+			vertical-align: top;
+		}
+		table.root-causes tr.high {
+			background-color: #dfd;
+		}
+		table.root-causes tr.med {
+			background-color: #ffd;
+		}
+		table.root-causes tr.low {
+			background-color: #fdd;
+		}
 	</style>
 </head>
 <body>
@@ -46,23 +134,49 @@
 	<a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB">
 		<img src="https://img.shields.io/github/stars/nigelhorne/TimeZone-TimeZoneDB?style=social" alt="GitHub stars">
 	</a>
-	<img src="https://img.shields.io/badge/coverage-71%25-yellow" alt="Coverage badge">
+	<img src="https://img.shields.io/badge/coverage-97%25-brightgreen" alt="Coverage badge">
 </div>
 <h1>TimeZone::TimeZoneDB</h1><h2>Coverage Report</h2>
-<table>
-<tr><th>File</th><th>Stmt</th><th>Branch</th><th>Cond</th><th>Sub</th><th>Total</th><th>&Delta;</th></tr>
-<tr class="med"><td><a href="blib-lib-TimeZone-TimeZoneDB-pm.html" title="View coverage line by line">blib/lib/TimeZone/TimeZoneDB.pm</a> <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB/blob/14f30684e1ec9efd41d25ebacd25503e4315ed3b/blib/lib/TimeZone/TimeZoneDB.pm" class="icon-link" title="View source on GitHub">&#128269;</a></td><td>79.3</td><td>46.7</td><td>53.8</td><td>94.4</td><td><span class="coverage-badge badge-warn" title="Moderate coverage">71.9%</span></td><td class="negative" title="Previous: 72.7%">&#9660; 0.8%</td></tr>
-<tr class="summary-row"><td colspan="2"><strong>Summary</strong></td><td colspan="2">1 files</td><td colspan="3">Avg: 71%, Low: 0</td></tr>
-<tr class="med"><td><strong>Total</strong></td><td>79.3</td><td>46.7</td><td>53.8</td><td>94.4</td><td colspan="2"><strong>71.9</strong></td></tr>
-</table>
-<p>
-	<label>
-		<input type="checkbox" id="toggleTrend" checked>
-		Show regression trend
-	</label>
-</p>
+<table data-sort-col="0" data-sort-order="asc">
+<!-- Make the column headers clickable -->
+<thead>
+<tr>
+	<th class="sortable" onclick="sortTable(this, 0)"><span class="label">File</span> <span class="arrow active">&#x25B2;</span></th>
+	<th class="sortable" onclick="sortTable(this, 1)"><span class="label">Stmt</span> <span class="arrow">&#x25B2;</span></th>
+	<th class="sortable" onclick="sortTable(this, 2)"><span class="label">Branch</span> <span class="arrow">&#x25B2;</span></th>
+	<th class="sortable" onclick="sortTable(this, 3)"><span class="label">Cond</span> <span class="arrow">&#x25B2;</span></th>
+	<th class="sortable" onclick="sortTable(this, 4)"><span class="label">Sub</span> <span class="arrow">&#x25B2;</span></th>
+	<th class="sortable" onclick="sortTable(this, 5)"><span class="label">Total</span> <span class="arrow">&#x25B2;</span></th>
+	<th class="sortable" onclick="sortTable(this, 6)"><span class="label">&Delta;</span> <span class="arrow">&#x25B2;</span></th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr class="high"><td><a href="blib-lib-TimeZone-TimeZoneDB-pm.html" title="View coverage line by line" target="_blank">lib/TimeZone/TimeZoneDB.pm</a> <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB/blob/0784f8e6f491a260bc844b9d2bbb5447d4014700/lib/TimeZone/TimeZoneDB.pm" class="icon-link" title="View source on GitHub">&#128269;</a><canvas class="sparkline" width="80" height="20" data-points="76.6,76.6,76.6,76.6,76.6,76.6,76.6,76.6,71.9,72.7"></canvas></td><td>100.0</td><td>100.0</td><td>82.9</td><td>100.0</td><td><span class="coverage-badge badge-good" title="Excellent coverage">97.2%</span></td><td class="positive" title="Previous (sparkline): 71.9%">&#9650; 0.8%</td></tr>
+<tr class="summary-row nosort"><td colspan="2"><strong>Summary</strong></td><td colspan="2">1 files</td><td colspan="3">Avg: 97%, Low: 0</td></tr>
+<tr class="high nosort"><td><strong>Total</strong></td><td>100.0</td><td>100.0</td><td>82.9</td><td>100.0</td><td colspan="2"><strong>97.2</strong></td></tr>
+</tbody></table>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1em;">
+	<div>
+		<h2>Coverage Trend</h2>
+		<label>
+			<input type="checkbox" id="toggleTrend" checked>
+			Show regression trend
+		</label>
+		<div>
+		</div>
+	</div>
+	<div id="zoomControls" style="margin-top:8px;">
+		<input type="button" value="Refresh" onClick="refresh(this)">
+		<button id="resetZoomBtn" type="button">Reset Zoom</button>
+	</div>
+</div>
 <canvas id="coverageTrend" width="600" height="300"></canvas>
+<!-- Zoom controls for the trend chart -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Add chartjs-plugin-zoom (required for wheel/pinch/drag zoom & pan) -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom\@2.1.1/dist/chartjs-plugin-zoom.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 <script>
 function linearRegression(data) {
@@ -75,6 +189,9 @@ function linearRegression(data) {
 	const sumXY = xs.reduce((acc, val, i) => acc + val * ys[i], 0);
 	const sumX2 = xs.reduce((acc, val) => acc + val * val, 0);
 
+	if(n < 2 || (n * sumX2 - sumX * sumX) === 0) {
+		return [];
+	}
 	const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
 	const intercept = (sumY - slope * sumX) / n;
 
@@ -84,17 +201,30 @@ function linearRegression(data) {
 	}));
 }
 
-const dataPoints = [ { x: "2025-09-02T09:27:34-04:00", y: 76.6467065868264, delta: 0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/3e9b00a", label: "2025-09-02T09:27:34-04:00", pointBackgroundColor: "gray", comment: "Merge branch 'master' of github.com:nigelhorne/TimeZone-TimeZoneDB" },
-{ x: "2025-09-02T09:04:20-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/fcd936b", label: "2025-09-02T09:04:20-04:00", pointBackgroundColor: "gray", comment: "Added the script to make the dashboard" },
-{ x: "2025-09-03T07:43:43-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/7950775", label: "2025-09-03T07:43:43-04:00", pointBackgroundColor: "gray", comment: "Release 0.04" },
-{ x: "2025-09-27T09:23:48-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/5cc99be", label: "2025-09-27T09:23:48-04:00", pointBackgroundColor: "gray", comment: "Fix the output of the test generator" },
-{ x: "2025-09-26T20:38:34-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/b4cf57d", label: "2025-09-26T20:38:34-04:00", pointBackgroundColor: "gray", comment: "Added the test corpus files" },
-{ x: "2025-09-26T20:43:39-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/df5d620", label: "2025-09-26T20:43:39-04:00", pointBackgroundColor: "gray", comment: "Merge branch 'master' of github.com:nigelhorne/TimeZone-TimeZoneDB" },
-{ x: "2025-09-27T08:49:53-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/f92a535", label: "2025-09-27T08:49:53-04:00", pointBackgroundColor: "gray", comment: "Merge branch 'master' of github.com:nigelhorne/TimeZone-TimeZoneDB" },
-{ x: "2025-12-29T09:44:03-05:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/7c81a28", label: "2025-12-29T09:44:03-05:00", pointBackgroundColor: "gray", comment: "Merge pull request #3 from nigelhorne/dependabot/github_actions/actions/checkout-6" },
-{ x: "2026-05-21T08:36:01-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/9696902", label: "2026-05-21T08:36:01-04:00", pointBackgroundColor: "gray", comment: "Reset the fuzz testing" },
-{ x: "2026-06-01T10:50:59-04:00", y: 72.7272727272727, delta: -3.9, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/5ed8874", label: "2026-06-01T10:50:59-04:00", pointBackgroundColor: "red", comment: "Fix ua(undef) silently corrupting the stored user-agent" } ];
+
+const dataPoints = [ { x: "2025-09-02T09:04:20-04:00", y: 76.6467065868264, delta: 0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/fcd936b37e6a8acffaa2b15368f6e756b10027c4", label: "2025-09-02T09:04:20-04:00", pointBackgroundColor: "gray", comment: "Added the script to make the dashboard" },
+{ x: "2025-09-03T07:43:43-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/7950775a3f0999ae75afd887f92a526581ffddce", label: "2025-09-03T07:43:43-04:00", pointBackgroundColor: "gray", comment: "Release 0.04" },
+{ x: "2025-09-26T20:38:34-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/b4cf57d63ed8a4fc0e3113315726414c1cb6d015", label: "2025-09-26T20:38:34-04:00", pointBackgroundColor: "gray", comment: "Added the test corpus files" },
+{ x: "2025-09-27T09:23:48-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/5cc99beddd02f2d394d4f395d4733142a6098dbc", label: "2025-09-27T09:23:48-04:00", pointBackgroundColor: "gray", comment: "Fix the output of the test generator" },
+{ x: "2025-12-29T09:44:03-05:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/7c81a2846392ebd166e8f1c1a9666e70715a0562", label: "2025-12-29T09:44:03-05:00", pointBackgroundColor: "gray", comment: "Merge pull request #3 from nigelhorne/dependabot/github_actions/actions/checkout-6" },
+{ x: "2026-05-21T08:36:01-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/9696902215e132e7767faca8374fc6841bfdeb34", label: "2026-05-21T08:36:01-04:00", pointBackgroundColor: "gray", comment: "Reset the fuzz testing" },
+{ x: "2026-06-01T10:50:59-04:00", y: 72.7272727272727, delta: -3.9, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/5ed887490955ff8411c904dcc12182b7d7cf46dd", label: "2026-06-01T10:50:59-04:00", pointBackgroundColor: "red", comment: "Fix ua(undef) silently corrupting the stored user-agent" },
+{ x: "2026-06-01T13:20:57-04:00", y: 71.8918918918919, delta: -0.8, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/14f30684e1ec9efd41d25ebacd25503e4315ed3b", label: "2026-06-01T13:20:57-04:00", pointBackgroundColor: "red", comment: "Added Z definitions" } ];
 const regressionPoints = linearRegression(dataPoints);
+// Try to register the zoom plugin (handles different UMD builds)
+(function registerZoomPlugin(){
+	try {
+		const candidates = ['chartjsPluginZoom','ChartZoom','zoomPlugin','chartjs_plugin_zoom','ChartjsPluginZoom','chartjsPluginZoom'];
+		for(const name of candidates) {
+			if(window[name]) {
+				try { Chart.register(window[name]); console.log('Registered zoom plugin:', name); return; } catch(e) { console.warn('zoom register failed for', name, e); }
+			}
+		}
+		// Some CDN builds auto-register the plugin; if nothing found that's OK (feature disabled).
+	} catch(e) {
+		console.warn('registerZoomPlugin error', e);
+	}
+})();
 const ctx = document.getElementById('coverageTrend').getContext('2d');
 const chart = new Chart(ctx, {
 	type: 'line',
@@ -127,9 +257,9 @@ const chart = new Chart(ctx, {
 				type: 'time',
 				time: {
 					tooltipFormat: 'MMM d, yyyy HH:mm:ss',
-					unit: 'minute'
+					unit: 'day'
 				},
-				title: { display: true, text: 'Timestamp' }
+				title: { display: true, text: 'Commit Date' }
 			},
 			y: { beginAtZero: true, max: 100, title: { display: true, text: 'Coverage (%)' } }
 		}, plugins: {
@@ -157,26 +287,215 @@ const chart = new Chart(ctx, {
 						return commentLine ? [baseLine, commentLine] : [baseLine];
 					}
 				}
+			} , zoom: {	// Enable zoom & pan on the x-axis for the trend chart
+				pan: {
+					enabled: true,
+					mode: 'x'
+				}, zoom: {
+					wheel: {
+						enabled: true
+					}, pinch: {
+						enabled: true
+					}, mode: 'x'
+				}
 			}
 		}, onClick: (e) => {
 			const points = chart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, true);
-			if (points.length) {
+			if(points.length) {
 				const url = chart.data.datasets[0].data[points[0].index].url;
 				window.open(url, '_blank');
 			}
 		}
 	}
 });
+
 document.getElementById('toggleTrend').addEventListener('change', function(e) {
 	const show = e.target.checked;
 	const trendDataset = chart.data.datasets.find(ds => ds.label === 'Regression Line');
 	trendDataset.hidden = !show;
 	chart.update();
 });
+
+// Reset Zoom button handler (calls plugin API if available)
+const resetBtn = document.getElementById('resetZoomBtn');
+if(resetBtn) {
+	resetBtn.addEventListener('click', function() {
+		try {
+			if(chart && typeof chart.resetZoom === 'function') {
+				chart.resetZoom();
+			} else {
+				console.warn('resetZoom not available; zoom plugin may not be registered.');
+			}
+		} catch (e) {
+			console.warn('resetZoom call failed', e);
+		}
+	});
+}
+
+function sortTable(th, colIndex) {
+	const table = th.closest("table");
+	if(!table || !table.tBodies.length) return;
+
+	const tbody = table.tBodies[0];
+	const rows = Array.from(tbody.rows);
+
+	const prevCol = table.getAttribute("data-sort-col");
+	const prevOrder = table.getAttribute("data-sort-order") || "desc";
+	const asc = (prevCol != colIndex) ? true : (prevOrder === "desc");
+
+	const isNumeric = colIndex === 0; // Date column
+
+	const normalRows = rows.filter(r => !r.classList.contains("nosort"));
+	const fixedRows = rows.filter(r => r.classList.contains("nosort"));
+
+	normalRows.sort((a, b) => {
+		let x = a.cells[colIndex]?.innerText.trim() || "";
+		let y = b.cells[colIndex]?.innerText.trim() || "";
+
+		if(isNumeric) {
+			x = Date.parse(x) || 0;
+			y = Date.parse(y) || 0;
+		} else {
+			x = x.toLowerCase();
+			y = y.toLowerCase();
+		}
+
+		if(x < y) return asc ? -1 : 1;
+		if(x > y) return asc ? 1 : -1;
+		return 0;
+	});
+
+	normalRows.forEach(r => tbody.appendChild(r));
+	fixedRows.forEach(r => tbody.appendChild(r));
+
+	// Update arrows
+	const headers = table.tHead.rows[0].cells;
+	for(let i = 0; i < headers.length; i++) {
+		const arrow = headers[i].querySelector(".arrow");
+		if(!arrow) continue;
+
+		if(i === colIndex) {
+			arrow.textContent = asc ? "▲" : "▼";
+			arrow.classList.add("active");
+		} else {
+			arrow.textContent = "▲";
+			arrow.classList.remove("active");
+		}
+	}
+
+	table.setAttribute("data-sort-col", colIndex);
+	table.setAttribute("data-sort-order", asc ? "asc" : "desc");
+}
+
+
+// Initial display.
+// The table has been set up sorted in ascending order on the filename; reflect that in the GUI
+document.addEventListener("DOMContentLoaded", () => {
+	const table = document.querySelector("table");
+	if(!table) return;
+
+	const headers = table.tHead.rows[0].cells;
+	for(let i = 0; i < headers.length; i++) {
+		const arrow = headers[i].querySelector(".arrow");
+		if(!arrow) continue;
+
+		if(i === 0) {
+			arrow.textContent = "▲";
+			arrow.classList.add("active");
+		} else {
+			arrow.textContent = "▲";
+			arrow.classList.remove("active");
+		}
+	}
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+	document.querySelectorAll("canvas.sparkline").forEach(canvas => {
+		const raw = canvas.getAttribute("data-points");
+		if(!raw) return;
+		const points = raw.split(",").map(v => parseFloat(v));
+
+		new Chart(canvas.getContext("2d"), {
+			type: 'line',
+			data: {
+				labels: points.map((_, i) => i+1),
+				datasets: [{
+					data: points,
+					borderColor: points.length > 1 && points[points.length-1] >= points[0] ? "green" : "red",
+					borderWidth: 1,
+					fill: false,
+					tension: 0.3,
+					pointRadius: 0
+				}]
+			}, options: {
+				responsive: false,
+				maintainAspectRatio: false,
+				elements: { line: { borderJoinStyle: 'round' } },
+				plugins: {
+					legend: { display: false },
+					tooltip: { enabled: false },
+					zoom: {	// Enable zoom and pan
+						pan: {
+							enabled: true,
+							mode: 'x',
+						}, zoom: {
+							wheel: {
+								enabled: true,
+							},
+							pinch: {
+								enabled: true
+							},
+							mode: 'x',
+						}
+					}
+				}, scales: { x: { display: false }, y: { display: false } }
+			}
+		});
+	});
+});
+
+function refresh(){
+	window.location.reload("Refresh")
+}
 </script>
+
+<p><center>Use mouse wheel or pinch to zoom; drag to pan</center></p>
+<p>No issues active on <a href="https://rt.cpan.org/Public/Dist/Display.html?Name=TimeZone-TimeZoneDB">RT</a></p>
+<p>No <A HREF="https://fast2-matrix.cpantesters.org/?dist=TimeZone-TimeZoneDB+0.04">CPAN Testers</A> failures reported for TimeZone-TimeZoneDB 0.04</p>
+<h2>Mutation Report</h2>
+<h3>Mutation Summary</h3>
+<ul>
+<li><b>Score</b>: 100%</li>
+<li><b>Total</b>: 0</li>
+<li><b>Killed</b>: 
+0
+</li>
+<li><b>Survived</b>: 
+0
+</li>
+</ul>
+<h3>Mutation Files</h3>
+
+<table border='1' cellpadding='5'>
+
+<tr><th>File</th><th>Total</th><th>Killed</th><th>Survivors</th><th>Skipped</th><th>Score%</th><th>Complexity</th><th title="TER1=Statement, TER2=Branch, TER3=LCSAJ Path">TER1 / TER2 / TER3</th></tr>
+
+</table>
+
+<h2>Structural Coverage (Approximate)</h2>
+<div class='summary'>
+Statement Coverage: 100.00% (120 / 120)<br>
+Branch Coverage: 100.00% (40 / 40)<br>
+<em>Approximate LCSAJ derived from branch and statement coverage.</em>
+</div>
+<h2>Executive Summary</h2>
+<div class='summary'>
+Tests execute 100.00% of the code. No mutation data available yet — trigger the mutation workflow for fault detection analysis.
+</div>
 <footer>
 	<p>Project: <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB">TimeZone-TimeZoneDB</a></p>
-	<p><em>Last updated: 2026-06-01 17:24:56 - <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/14f30684e1ec9efd41d25ebacd25503e4315ed3b">commit <code>14f3068</code></a></em></p>
+	<p><em>Last updated: 2026-06-01 20:49:35 - <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/0784f8e6f491a260bc844b9d2bbb5447d4014700">commit <code>0784f8e</code></a></em></p>
+	<p style="float: right; font-size: 0.85em; color: #999;">Powered by <a href="https://metacpan.org/dist/App-Test-Generator">App::Test::Generator 0.38</a></p>
 </footer>
 </body>
 </html>
