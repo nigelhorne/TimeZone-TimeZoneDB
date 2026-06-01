@@ -4,7 +4,7 @@ TimeZone::TimeZoneDB - Interface to [https://timezonedb.com](https://timezonedb.
 
 # VERSION
 
-Version 0.05
+Version 0.04
 
 # SYNOPSIS
 
@@ -124,33 +124,6 @@ implementing `warn()` and `error()` (e.g. [Log::Log4perl](https://metacpan.org/p
 
     { type => 'object' }   # a blessed TimeZone::TimeZoneDB reference
 
-### FORMAL SPECIFICATION
-
-    TimeZoneDB-State ::= [
-      key          : STRING ;
-      ua           : USERAGENT ;
-      host         : STRING ;
-      cache        : CACHE ;
-      min_interval : ℕ ;
-      last_request : ℕ
-    ]
-
-    Init
-      key?          : STRING
-      ua?           : USERAGENT ∪ {⊥}
-      host?         : STRING ∪ {⊥}
-      cache?        : CACHE ∪ {⊥}
-      min_interval? : ℕ ∪ {⊥}
-      result!       : TimeZoneDB-State
-    ────────────────────────────────────────────────────────
-      key? ≠ "" ∧
-      result!.key          = key? ∧
-      result!.ua           = (if ua? ≠ ⊥ then ua? else DefaultUA) ∧
-      result!.host         = (if host? ≠ ⊥ then host? else config.host) ∧
-      result!.cache        = (if cache? ≠ ⊥ then cache? else NewCache) ∧
-      result!.min_interval = (if min_interval? ≠ ⊥ then min_interval? else 0) ∧
-      result!.last_request = 0
-
 ## get\_time\_zone
 
     my $result = $tzdb->get_time_zone({ latitude => 51.34, longitude => 1.42 });
@@ -212,31 +185,6 @@ accidental secret leakage into log aggregators or crash reporters.
     Non-OK status  : undef
     Success        : { type => 'hashref', min => 1 }
 
-### FORMAL SPECIFICATION
-
-    GetTimeZone
-      Δ TimeZoneDB-State   (writes cache and last_request)
-      lat? : {n : ℝ | -90 ≤ n ≤ 90}
-      lng? : {n : ℝ | -180 ≤ n ≤ 180}
-      result! : HASHREF ∪ {⊥}
-    ────────────────────────────────────────────────────────
-      let k == sprintf(CACHE_KEY_FMT, lat?, lng?)
-      ∧ cache.has(k) ⇒
-            result! = cache.get(k)
-          ∧ last_request' = last_request
-          ∧ cache' = cache
-      ∧ ¬cache.has(k) ⇒
-            let r == ua.get(ApiUrl(lat?, lng?, key))
-            ∧ ¬r.ok ⇒ ⊥
-            ∧ r.ok ∧ r.json.status = "OK" ⇒
-                  result! = r.json
-                ∧ cache' = cache ⊕ {k ↦ r.json}
-                ∧ last_request' = now
-            ∧ r.ok ∧ r.json.status ≠ "OK" ⇒
-                  result! = ⊥
-                ∧ cache' = cache
-                ∧ last_request' = now
-
 ## ua
 
     # Getter: retrieve the current user-agent
@@ -296,22 +244,9 @@ without ambiguity about what was returned.
 
     { type => 'object' }   # the stored user-agent (getter or setter)
 
-### FORMAL SPECIFICATION
-
-    UA
-      Delta TimeZoneDB-State
-      ua? : USERAGENT ∪ {⊥}   (⊥ = not supplied)
-      ua! : USERAGENT
-    ────────────────────────────────────────────────────────
-      (ua? = ⊥ ∧ ua' = ua) ∨
-      (ua? ≠ ⊥ ∧ defined(ua?) ∧ ua? can 'get'
-               ∧ ua' = ua?
-               ∧ ∀ x : {key, host, cache, min_interval, last_request} • x' = x)
-      ∧ ua! = ua'
-
 # AUTHOR
 
-Nigel Horne, `<njh@bandsman.co.uk>`
+Nigel Horne, `<njh@nigelhorne.com>`
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
@@ -331,18 +266,79 @@ on your bug as I make changes.
 # SEE ALSO
 
 - TimezoneDB API: [https://timezonedb.com/api](https://timezonedb.com/api)
-- Testing Dashboard: [https://nigelhorne.github.io/TimeZone-TimeZoneDB/coverage/](https://nigelhorne.github.io/TimeZone-TimeZoneDB/coverage/)
+- [Test Dashboard](https://nigelhorne.github.io/TimeZone-TimeZoneDB/coverage/)
+
+## FORMAL SPECIFICATION
+
+### new
+
+    TimeZoneDB-State ::= [
+      key          : STRING ;
+      ua           : USERAGENT ;
+      host         : STRING ;
+      cache        : CACHE ;
+      min_interval : ℕ ;
+      last_request : ℕ
+    ]
+
+    Init
+      key?          : STRING
+      ua?           : USERAGENT ∪ {⊥}
+      host?         : STRING ∪ {⊥}
+      cache?        : CACHE ∪ {⊥}
+      min_interval? : ℕ ∪ {⊥}
+      result!       : TimeZoneDB-State
+    ────────────────────────────────────────────────────────
+      key? ≠ "" ∧
+      result!.key          = key? ∧
+      result!.ua           = (if ua? ≠ ⊥ then ua? else DefaultUA) ∧
+      result!.host         = (if host? ≠ ⊥ then host? else config.host) ∧
+      result!.cache        = (if cache? ≠ ⊥ then cache? else NewCache) ∧
+      result!.min_interval = (if min_interval? ≠ ⊥ then min_interval? else 0) ∧
+      result!.last_request = 0
+
+### get\_time\_zone
+
+    GetTimeZone
+      Δ TimeZoneDB-State   (writes cache and last_request)
+      lat? : {n : ℝ | -90 ≤ n ≤ 90}
+      lng? : {n : ℝ | -180 ≤ n ≤ 180}
+      result! : HASHREF ∪ {⊥}
+    ────────────────────────────────────────────────────────
+      let k == sprintf(CACHE_KEY_FMT, lat?, lng?)
+      ∧ cache.has(k) ⇒
+            result! = cache.get(k)
+          ∧ last_request' = last_request
+          ∧ cache' = cache
+      ∧ ¬cache.has(k) ⇒
+            let r == ua.get(ApiUrl(lat?, lng?, key))
+            ∧ ¬r.ok ⇒ ⊥
+            ∧ r.ok ∧ r.json.status = "OK" ⇒
+                  result! = r.json
+                ∧ cache' = cache ⊕ {k ↦ r.json}
+                ∧ last_request' = now
+            ∧ r.ok ∧ r.json.status ≠ "OK" ⇒
+                  result! = ⊥
+                ∧ cache' = cache
+                ∧ last_request' = now
+
+## ua
+
+    UA
+      Delta TimeZoneDB-State
+      ua? : USERAGENT ∪ {⊥}   (⊥ = not supplied)
+      ua! : USERAGENT
+    ────────────────────────────────────────────────────────
+      (ua? = ⊥ ∧ ua' = ua) ∨
+      (ua? ≠ ⊥ ∧ defined(ua?) ∧ ua? can 'get'
+               ∧ ua' = ua?
+               ∧ ∀ x : {key, host, cache, min_interval, last_request} • x' = x)
+      ∧ ua! = ua'
 
 # LICENSE AND COPYRIGHT
 
-Copyright 2023-2025 Nigel Horne.
+Copyright 2023-2026 Nigel Horne.
 
-This program is released under the following licence: GPL2
-
-# POD ERRORS
-
-Hey! **The above document had some coding errors, which are explained below:**
-
-- Around line 193:
-
-    Non-ASCII character seen before =encoding in 'ℕ'. Assuming UTF-8
+Usage is subject to the GPL2 licence terms.
+If you use it,
+please let me know.

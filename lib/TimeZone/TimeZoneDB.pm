@@ -183,33 +183,6 @@ implementing C<warn()> and C<error()> (e.g. L<Log::Log4perl>).
 
   { type => 'object' }   # a blessed TimeZone::TimeZoneDB reference
 
-=head3 FORMAL SPECIFICATION
-
-  TimeZoneDB-State ::= [
-    key          : STRING ;
-    ua           : USERAGENT ;
-    host         : STRING ;
-    cache        : CACHE ;
-    min_interval : ℕ ;
-    last_request : ℕ
-  ]
-
-  Init
-    key?          : STRING
-    ua?           : USERAGENT ∪ {⊥}
-    host?         : STRING ∪ {⊥}
-    cache?        : CACHE ∪ {⊥}
-    min_interval? : ℕ ∪ {⊥}
-    result!       : TimeZoneDB-State
-  ────────────────────────────────────────────────────────
-    key? ≠ "" ∧
-    result!.key          = key? ∧
-    result!.ua           = (if ua? ≠ ⊥ then ua? else DefaultUA) ∧
-    result!.host         = (if host? ≠ ⊥ then host? else config.host) ∧
-    result!.cache        = (if cache? ≠ ⊥ then cache? else NewCache) ∧
-    result!.min_interval = (if min_interval? ≠ ⊥ then min_interval? else 0) ∧
-    result!.last_request = 0
-
 =cut
 
 sub new
@@ -222,6 +195,7 @@ sub new
 	if(!defined($class)) {
 		$class = __PACKAGE__;
 	} elsif(Scalar::Util::blessed($class)) {
+		# If $class is an object, clone it with new arguments
 		# Clone path: merge new params over the existing object's fields.
 		if(exists($params->{ua})) {
 			if(!defined($params->{ua})) {
@@ -337,31 +311,6 @@ accidental secret leakage into log aggregators or crash reporters.
   Non-OK status  : undef
   Success        : { type => 'hashref', min => 1 }
 
-=head3 FORMAL SPECIFICATION
-
-  GetTimeZone
-    Δ TimeZoneDB-State   (writes cache and last_request)
-    lat? : {n : ℝ | -90 ≤ n ≤ 90}
-    lng? : {n : ℝ | -180 ≤ n ≤ 180}
-    result! : HASHREF ∪ {⊥}
-  ────────────────────────────────────────────────────────
-    let k == sprintf(CACHE_KEY_FMT, lat?, lng?)
-    ∧ cache.has(k) ⇒
-          result! = cache.get(k)
-        ∧ last_request' = last_request
-        ∧ cache' = cache
-    ∧ ¬cache.has(k) ⇒
-          let r == ua.get(ApiUrl(lat?, lng?, key))
-          ∧ ¬r.ok ⇒ ⊥
-          ∧ r.ok ∧ r.json.status = "OK" ⇒
-                result! = r.json
-              ∧ cache' = cache ⊕ {k ↦ r.json}
-              ∧ last_request' = now
-          ∧ r.ok ∧ r.json.status ≠ "OK" ⇒
-                result! = ⊥
-              ∧ cache' = cache
-              ∧ last_request' = now
-
 =cut
 
 sub get_time_zone
@@ -434,6 +383,9 @@ sub get_time_zone
 	# Redact the API key before including the URL in any error message
 	if($res->is_error()) {
 		(my $safe_url = $url) =~ s/key=[^&]*/key=REDACTED/;
+		if(my $logger = $self->{logger}) {
+			$logger->error($safe_url . ' API returned error: ' . $res->status_line());
+		}
 		Carp::croak($safe_url . ' API returned error: ' . $res->status_line());
 	}
 
@@ -441,6 +393,9 @@ sub get_time_zone
 	my $rc;
 	eval { $rc = JSON::MaybeXS->new()->utf8()->decode($res->decoded_content()) };
 	if($@) {
+		if(my $logger = $self->{logger}) {
+			$logger->warn("Failed to parse JSON response: $@");
+		}
 		Carp::carp("Failed to parse JSON response: $@");
 		return;
 	}
@@ -524,19 +479,6 @@ without ambiguity about what was returned.
 
   { type => 'object' }   # the stored user-agent (getter or setter)
 
-=head3 FORMAL SPECIFICATION
-
-  UA
-    Delta TimeZoneDB-State
-    ua? : USERAGENT ∪ {⊥}   (⊥ = not supplied)
-    ua! : USERAGENT
-  ────────────────────────────────────────────────────────
-    (ua? = ⊥ ∧ ua' = ua) ∨
-    (ua? ≠ ⊥ ∧ defined(ua?) ∧ ua? can 'get'
-             ∧ ua' = ua?
-             ∧ ∀ x : {key, host, cache, min_interval, last_request} • x' = x)
-    ∧ ua! = ua'
-
 =cut
 
 sub ua {
@@ -583,7 +525,7 @@ sub ua {
 
 =head1 AUTHOR
 
-Nigel Horne, C<< <njh@bandsman.co.uk> >>
+Nigel Horne, C<< <njh@nigelhorne.com> >>
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
@@ -606,15 +548,86 @@ on your bug as I make changes.
 
 =item * TimezoneDB API: L<https://timezonedb.com/api>
 
-=item * Testing Dashboard: L<https://nigelhorne.github.io/TimeZone-TimeZoneDB/coverage/>
+=item * L<Test Dashboard|https://nigelhorne.github.io/TimeZone-TimeZoneDB/coverage/>
 
 =back
 
+=encoding utf-8
+
+=head2 FORMAL SPECIFICATION
+
+=head3 new
+
+  TimeZoneDB-State ::= [
+    key          : STRING ;
+    ua           : USERAGENT ;
+    host         : STRING ;
+    cache        : CACHE ;
+    min_interval : ℕ ;
+    last_request : ℕ
+  ]
+
+  Init
+    key?          : STRING
+    ua?           : USERAGENT ∪ {⊥}
+    host?         : STRING ∪ {⊥}
+    cache?        : CACHE ∪ {⊥}
+    min_interval? : ℕ ∪ {⊥}
+    result!       : TimeZoneDB-State
+  ────────────────────────────────────────────────────────
+    key? ≠ "" ∧
+    result!.key          = key? ∧
+    result!.ua           = (if ua? ≠ ⊥ then ua? else DefaultUA) ∧
+    result!.host         = (if host? ≠ ⊥ then host? else config.host) ∧
+    result!.cache        = (if cache? ≠ ⊥ then cache? else NewCache) ∧
+    result!.min_interval = (if min_interval? ≠ ⊥ then min_interval? else 0) ∧
+    result!.last_request = 0
+
+=head3 get_time_zone
+
+  GetTimeZone
+    Δ TimeZoneDB-State   (writes cache and last_request)
+    lat? : {n : ℝ | -90 ≤ n ≤ 90}
+    lng? : {n : ℝ | -180 ≤ n ≤ 180}
+    result! : HASHREF ∪ {⊥}
+  ────────────────────────────────────────────────────────
+    let k == sprintf(CACHE_KEY_FMT, lat?, lng?)
+    ∧ cache.has(k) ⇒
+          result! = cache.get(k)
+        ∧ last_request' = last_request
+        ∧ cache' = cache
+    ∧ ¬cache.has(k) ⇒
+          let r == ua.get(ApiUrl(lat?, lng?, key))
+          ∧ ¬r.ok ⇒ ⊥
+          ∧ r.ok ∧ r.json.status = "OK" ⇒
+                result! = r.json
+              ∧ cache' = cache ⊕ {k ↦ r.json}
+              ∧ last_request' = now
+          ∧ r.ok ∧ r.json.status ≠ "OK" ⇒
+                result! = ⊥
+              ∧ cache' = cache
+              ∧ last_request' = now
+
+=head2 ua
+
+  UA
+    Delta TimeZoneDB-State
+    ua? : USERAGENT ∪ {⊥}   (⊥ = not supplied)
+    ua! : USERAGENT
+  ────────────────────────────────────────────────────────
+    (ua? = ⊥ ∧ ua' = ua) ∨
+    (ua? ≠ ⊥ ∧ defined(ua?) ∧ ua? can 'get'
+             ∧ ua' = ua?
+             ∧ ∀ x : {key, host, cache, min_interval, last_request} • x' = x)
+    ∧ ua! = ua'
+
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2023-2025 Nigel Horne.
+Copyright 2023-2026 Nigel Horne.
 
-This program is released under the following licence: GPL2
+Usage is subject to the GPL2 licence terms.
+If you use it,
+please let me know.
 
 =cut
 
