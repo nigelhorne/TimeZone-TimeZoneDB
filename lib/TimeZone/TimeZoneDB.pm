@@ -533,9 +533,20 @@ sub ua {
 	# Getter path: no arguments, return the stored agent immediately
 	return $self->{ua} unless @_;
 
+	# Params::Get::get_params('ua', \@_) mis-routes the named form ua(ua => $ref)
+	# into { ua => [$key, $ref] } because its $array_ref path fires before the
+	# even-count hash path when the value is a reference (Params::Get line 258).
+	# Detect and fix the named-pair form manually before passing to validate_strict.
+	my $args;
+	if(@_ == 2 && defined($_[0]) && !ref($_[0]) && $_[0] eq 'ua') {
+		$args = { ua => $_[1] };	# named: ua(ua => $obj)
+	} else {
+		$args = Params::Get::get_params('ua', \@_);	# positional: ua($obj)
+	}
+
 	# Validate that the supplied object implements the interface we depend on
 	my $params = Params::Validate::Strict::validate_strict(
-		args   => Params::Get::get_params('ua', \@_),
+		args   => $args,
 		schema => {
 			ua => {
 				type => 'object',
