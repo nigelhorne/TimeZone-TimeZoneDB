@@ -20,6 +20,7 @@ t/get_time_zone.t
 t/integration.t
 t/limiting.t
 t/links.t
+t/mutant_killers.t
 t/no404s.t
 t/noopentickets.t
 t/noplan.t
