@@ -223,8 +223,15 @@ sub new
 		$class = __PACKAGE__;
 	} elsif(Scalar::Util::blessed($class)) {
 		# Clone path: merge new params over the existing object's fields.
-		# A deliberately undef ua means "keep the original", so drop it.
-		delete $params->{ua} if(exists($params->{ua}) && !defined($params->{ua}));
+		if(exists($params->{ua})) {
+			if(!defined($params->{ua})) {
+				# ua=>undef means "keep the original" -- silently drop it
+				delete $params->{ua};
+			} elsif(!Scalar::Util::blessed($params->{ua}) || !$params->{ua}->can('get')) {
+				# A defined ua must be a proper object with a get() method
+				Carp::croak("'ua' argument must be an object with a get() method");
+			}
+		}
 		return bless { %{$class}, %{$params} }, ref($class);
 	}
 
@@ -382,6 +389,11 @@ sub get_time_zone
 
 	my $latitude  = $params->{latitude};
 	my $longitude = $params->{longitude};
+
+	# Params::Validate::Strict silently skips type/range checks for undef values,
+	# so guard explicitly to avoid sprintf warnings and silent URL corruption
+	Carp::croak("Required parameter 'latitude' must be defined")  unless defined($latitude);
+	Carp::croak("Required parameter 'longitude' must be defined") unless defined($longitude);
 
 	# Build the full API URL; key must go in the query string (API requirement)
 	my $uri = URI->new(
