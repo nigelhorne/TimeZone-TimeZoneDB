@@ -309,10 +309,27 @@ so you can use L<LWP::UserAgent::Throttled> to keep within that limit.
 
 sub ua {
 	my $self = shift;
+
 	if (@_) {
-		$self->{ua} = shift;
+		my $params = Params::Validate::Strict::validate_strict({
+			args => Params::Get::get_params('ua', \@_),
+			schema => {
+				ua => {
+					type => 'object',
+					can => 'get'
+				}
+			}
+		});
+		# Reject undef explicitly before it silently corrupts $self->{ua}
+		if(!$params->{ua}) {
+			if(my $logger = $self->{'logger'}) {
+				$logger->error('ua() requires a defined value')
+			}
+			Carp::croak('ua() requires a defined value')
+		}
+		$self->{ua} = $params->{ua};
 	}
-	$self->{ua};
+	return $self->{ua};
 }
 
 =head1 AUTHOR

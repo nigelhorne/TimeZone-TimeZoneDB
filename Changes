@@ -1,5 +1,9 @@
 Revision history for TimeZone::TimeZoneDB
 
+0.05
+	[ Bug Fixes ]
+	- Fix ua(undef) silently corrupting the stored user-agent
+
 0.04	Wed Sep  3 07:42:27 EDT 2025
 	Use Object::Configure
 	More use of Params::Get
