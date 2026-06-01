@@ -1,0 +1,1054 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+
+/* --------------------------------------------------
+   CSS Variables (Light Mode Default)
+-------------------------------------------------- */
+
+:root {
+    --bg: #ffffff;
+    --text: #000000;
+    --table-header: #333;
+    --table-header-text: #ffffff;
+
+    --survived-1: #f8d7da;
+    --survived-2: #f5b7b1;
+    --survived-3: #ec7063;
+
+    --killed: #d4edda;
+    --border: #cccccc;
+}
+
+/* --------------------------------------------------
+   Dark Mode Overrides
+-------------------------------------------------- */
+
+html[data-theme='dark'] {
+    --bg: #1e1e1e;
+    --text: #dddddd;
+    --table-header: #222;
+    --table-header-text: #ffffff;
+
+    --survived-1: #5c2b2e;
+    --survived-2: #7b2c2f;
+    --survived-3: #a93226;
+
+    --killed: #1e4620;
+    --border: #555;
+}
+
+/* --------------------------------------------------
+   Global Styles
+-------------------------------------------------- */
+
+body {
+	font-family: sans-serif;
+	background: var(--bg);
+	color: var(--text);
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    background: var(--table-header);
+    color: var(--table-header-text);
+}
+
+.survived-1 { background-color: var(--survived-1); }
+.survived-2 { background-color: var(--survived-2); }
+.survived-3 { background-color: var(--survived-3); }
+
+.killed { background-color: var(--killed); }
+
+.legend {
+    border: 1px solid #ccc;
+    background: #fafafa;
+    padding: 10px;
+    margin: 15px 0;
+    font-size: 0.9em;
+}
+
+.legend pre {
+    background: #f4f4f4;
+    padding: 5px;
+}
+
+.legend-box {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin: 0 6px 0 20px;
+    vertical-align: middle;
+    border: 1px solid var(--border);
+}
+
+/* White box for non-mutated lines */
+.legend-box.none {
+	background-color: var(--bg);
+}
+
+/* --------------------------------------------------
+   Suggested Test Box Styling
+   Theme-aware and readable in light & dark modes
+-------------------------------------------------- */
+
+.suggested-test {
+    margin-top: 6px;
+    margin-bottom: 12px;
+
+    /* Use theme variables instead of hardcoded colors */
+    background: var(--bg);
+    color: var(--text);
+
+    padding: 8px;
+    border-radius: 4px;
+
+    /* Subtle border for visual separation */
+    border: 1px solid var(--border);
+}
+
+/* Label styling */
+.suggest-label {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+/* Ensure the test code block inherits readable colors */
+.suggested-test pre {
+    background: transparent;   /* Prevent nested dark blocks */
+    color: inherit;            /* Match theme text color */
+    margin: 0;
+    font-family: monospace;
+}
+
+pre { line-height: 1.4; }
+
+pre > details {
+    margin: 0.2em 0;
+}
+
+pre > details:first-child {
+    margin-top: 0;
+}
+
+pre > details:last-child {
+    margin-bottom: 0;
+}
+
+pre details,
+pre summary,
+pre ul,
+pre li {
+    white-space: normal;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+}
+
+.nav { margin-bottom: 1em; }
+
+.toggle {
+    float: right;
+    cursor: pointer;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+}
+
+/* Tooltip container */
+.tooltip {
+	position: relative;
+	cursor: help;
+}
+
+/* Tooltip bubble */
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: var(--table-header);
+    color: var(--table-header-text);
+    padding: 6px 10px;
+    white-space: normal;
+    max-width: 300px;
+    min-width: 30ch;
+    font-size: 12px;
+    border-radius: 6px;
+    z-index: 1000;
+    margin-left: 10ch;   /* move tooltip ~10 characters to the right */
+}
+
+.mutant-details {
+	margin-left: 2em;
+	font-size: 0.9em;
+}
+
+/* Indent the list of mutations that displays when expanding by 8 characters */
+pre details.mutant-details ul {
+	padding-left: 8ch;
+	margin: 0.2em 0;
+}
+
+.mutant-details summary {
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.lcsaj-dot {
+    color: #5555ff;
+    font-size: 10px;
+    margin-right: 3px;
+}
+
+.lcsaj-dot-uncovered {
+    color: #cc4444;
+    font-size: 10px;
+    margin-right: 3px;
+}
+
+.lcsaj-tip {
+	position: relative;
+	display: inline-block;
+}
+
+.lcsaj-tip .lcsaj-tip-text {
+	visibility: hidden;
+	background-color: #333;
+	color: #fff;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 11px;
+	white-space: nowrap;
+	position: fixed;
+	z-index: 9999;
+	pointer-events: none;
+}
+
+.lcsaj-tip:hover .lcsaj-tip-text {
+	visibility: visible;
+}
+
+</style>
+</head>
+<body>
+<button class="toggle" onclick="toggleTheme()">🌙 Toggle Theme</button>
+<h1>lib/TimeZone/TimeZoneDB.pm</h1>
+<div class="nav"><a href="../../../index.html">Index</a>
+</div><div class='summary'>
+<strong>Structural Coverage (Approximate)</strong><p>
+TER1 (Statement): 100.00%<br>
+TER2 (Branch): 100.00%<br>
+TER3 (LCSAJ): 100.0% (23/23)<br>
+Approximate LCSAJ segments: 41<br>
+</div>
+
+    <div class="legend">
+        <h3>LCSAJ Legend</h3>
+
+        <p>
+        <span class="lcsaj-dot">●</span>
+        <b>Covered</b> — this LCSAJ path was executed during testing.
+        </p>
+
+        <p>
+        <span class="lcsaj-dot-uncovered">●</span>
+        <b>Not covered</b> — this LCSAJ path was never executed. These are the paths to focus on.
+        </p>
+
+        <p>
+        Multiple dots on a line indicate that multiple control-flow paths begin at that line.
+        Hovering over any dot shows:
+        </p>
+
+        <pre>
+        start → end → jump
+        </pre>
+
+        <ul>
+        <li><b>start</b> – first line of the linear sequence</li>
+        <li><b>end</b> – last line before control flow changes</li>
+        <li><b>jump</b> – line execution jumps to next</li>
+        </ul>
+
+        <p>
+        Uncovered paths show <b>[NOT COVERED]</b> in the tooltip.
+	</p>
+    </div>
+
+		<div class="legend">
+			<h3>Mutant Testing Legend</h3>
+			<span class="legend-box survived-1"></span> Survived (tests missed this)
+			<span class="legend-box killed"></span> Killed (tests detected this)
+			<span class="legend-box none"></span> No mutation
+		</div>
+	<pre>
+<span class="">    1: package TimeZone::TimeZoneDB;
+</span><span class="">    2: 
+</span><span class="">    3: use strict;
+</span><span class="">    4: use warnings;
+</span><span class="">    5: use autodie qw(:all);
+</span><span class="">    6: 
+</span><span class="">    7: use Carp;
+</span><span class="">    8: use CHI;
+</span><span class="">    9: use JSON::MaybeXS;
+</span><span class="">   10: use LWP::UserAgent;
+</span><span class="">   11: use Object::Configure;
+</span><span class="">   12: use Params::Get 0.13;
+</span><span class="">   13: use Params::Validate::Strict 0.10;
+</span><span class="">   14: use Readonly;
+</span><span class="">   15: use Return::Set;
+</span><span class="">   16: use Scalar::Util;
+</span><span class="">   17: use Time::HiRes;
+</span><span class="">   18: use URI;
+</span><span class="">   19: 
+</span><span class="">   20: =head1 NAME
+</span><span class="">   21: 
+</span><span class="">   22: TimeZone::TimeZoneDB - Interface to L&lt;https://timezonedb.com&gt; for looking up Timezone data
+</span><span class="">   23: 
+</span><span class="">   24: =head1 VERSION
+</span><span class="">   25: 
+</span><span class="">   26: Version 0.04
+</span><span class="">   27: 
+</span><span class="">   28: =cut
+</span><span class="">   29: 
+</span><span class="">   30: our $VERSION = &#39;0.04&#39;;
+</span><span class="">   31: 
+</span><span class="">   32: # ---------------------------------------------------------------------------
+</span><span class="">   33: # Compile-time constants for the timezonedb.com REST API.
+</span><span class="">   34: # These never vary and are inlined by the compiler.
+</span><span class="">   35: # ---------------------------------------------------------------------------
+</span><span class="">   36: Readonly::Scalar my $API_FORMAT    =&gt; &#39;json&#39;;
+</span><span class="">   37: Readonly::Scalar my $API_BY        =&gt; &#39;position&#39;;	# query by geographic position
+</span><span class="">   38: 
+</span><span class="">   39: # printf-style format for the cache key; 6 dp normalises 0.1 and 0.1000000
+</span><span class="">   40: Readonly::Scalar my $CACHE_KEY_FMT =&gt; &#39;tz:%.6f:%.6f&#39;;
+</span><span class="">   41: 
+</span><span class="">   42: # Valid coordinate ranges as defined by the WGS-84 standard
+</span><span class="">   43: Readonly::Scalar my $LAT_MIN =&gt; -90;
+</span><span class="">   44: Readonly::Scalar my $LAT_MAX =&gt;  90;
+</span><span class="">   45: Readonly::Scalar my $LNG_MIN =&gt; -180;
+</span><span class="">   46: Readonly::Scalar my $LNG_MAX =&gt;  180;
+</span><span class="">   47: 
+</span><span class="">   48: # ---------------------------------------------------------------------------
+</span><span class="">   49: # Runtime defaults.  Every key may be overridden via Object::Configure,
+</span><span class="">   50: # which reads from a per-class configuration file or environment variables.
+</span><span class="">   51: # ---------------------------------------------------------------------------
+</span><span class="">   52: my %config = (
+</span><span class="">   53: 	host          =&gt; &#39;api.timezonedb.com&#39;,	# remote API hostname
+</span><span class="">   54: 	api_version   =&gt; &#39;v2.1&#39;,		# path component for the API version
+</span><span class="">   55: 	api_endpoint  =&gt; &#39;get-time-zone&#39;,	# path component for the lookup method
+</span><span class="">   56: 	cache_expires =&gt; &#39;1 day&#39;,		# CHI expiry string for cached responses
+</span><span class="">   57: 	min_interval  =&gt; 0,			# minimum seconds between outbound requests
+</span><span class="">   58: );
+</span><span class="">   59: 
+</span><span class="">   60: =head1 SYNOPSIS
+</span><span class="">   61: 
+</span><span class="">   62:     use TimeZone::TimeZoneDB;
+</span><span class="">   63: 
+</span><span class="">   64:     my $tzdb = TimeZone::TimeZoneDB-&gt;new(key =&gt; &#39;XXXXXXXX&#39;);
+</span><span class="">   65:     my $tz = $tzdb-&gt;get_time_zone({ latitude =&gt; 0.1, longitude =&gt; 0.2 });
+</span><span class="">   66: 
+</span><span class="">   67: =head1 DESCRIPTION
+</span><span class="">   68: 
+</span><span class="">   69: The C&lt;TimeZone::TimeZoneDB&gt; Perl module provides an interface to the
+</span><span class="">   70: L&lt;https://timezonedb.com&gt; API, enabling users to retrieve timezone data
+</span><span class="">   71: based on geographic coordinates.
+</span><span class="">   72: It supports configurable HTTP user agents, allowing for proxy settings
+</span><span class="">   73: and request throttling.
+</span><span class="">   74: The module includes robust error handling, ensuring proper validation of
+</span><span class="">   75: input parameters and secure API interactions.
+</span><span class="">   76: JSON responses are safely parsed with error handling to prevent crashes.
+</span><span class="">   77: Designed for flexibility, it allows users to override default configurations
+</span><span class="">   78: while maintaining a lightweight and efficient structure for querying timezone
+</span><span class="">   79: information.
+</span><span class="">   80: 
+</span><span class="">   81: =over 4
+</span><span class="">   82: 
+</span><span class="">   83: =item * Caching
+</span><span class="">   84: 
+</span><span class="">   85: Identical requests are cached (using L&lt;CHI&gt; or a user-supplied caching object),
+</span><span class="">   86: reducing the number of HTTP requests to the API and speeding up repeated queries.
+</span><span class="">   87: 
+</span><span class="">   88: A cache key is constructed from the normalised coordinates (6 decimal places)
+</span><span class="">   89: so that C&lt;0.1&gt; and C&lt;0.1000000&gt; share the same cache entry.
+</span><span class="">   90: 
+</span><span class="">   91: =item * Rate-Limiting
+</span><span class="">   92: 
+</span><span class="">   93: A minimum interval between successive API calls can be enforced to ensure that
+</span><span class="">   94: the API is not overwhelmed and to comply with any request throttling requirements.
+</span><span class="">   95: 
+</span><span class="">   96: Rate-limiting is implemented using L&lt;Time::HiRes&gt;.
+</span><span class="">   97: A minimum interval between API calls can be specified via the C&lt;min_interval&gt;
+</span><span class="">   98: parameter in the constructor.
+</span><span class="">   99: Before making an API call, the module checks how much time has elapsed since
+</span><span class="">  100: the last request and, if necessary, sleeps for the remaining time.
+</span><span class="">  101: 
+</span><span class="">  102: =back
+</span><span class="">  103: 
+</span><span class="">  104: =head1 METHODS
+</span><span class="">  105: 
+</span><span class="">  106: =head2 new
+</span><span class="">  107: 
+</span><span class="">  108:     my $tzdb = TimeZone::TimeZoneDB-&gt;new(key =&gt; &#39;XXXXX&#39;);
+</span><span class="">  109: 
+</span><span class="">  110:     # With a throttled user-agent that respects free-tier rate limits
+</span><span class="">  111:     use LWP::UserAgent::Throttled;
+</span><span class="">  112:     my $ua = LWP::UserAgent::Throttled-&gt;new();
+</span><span class="">  113:     $ua-&gt;env_proxy(1);
+</span><span class="">  114:     $tzdb = TimeZone::TimeZoneDB-&gt;new(ua =&gt; $ua, key =&gt; &#39;XXXXX&#39;);
+</span><span class="">  115: 
+</span><span class="">  116:     # Retrieve the timezone for Ramsgate, UK
+</span><span class="">  117:     my $tz = $tzdb-&gt;get_time_zone({ latitude =&gt; 51.34, longitude =&gt; 1.42 })-&gt;{&#39;zoneName&#39;};
+</span><span class="">  118:     print &quot;Ramsgate timezone: $tz\n&quot;;
+</span><span class="">  119: 
+</span><span class="">  120: Creates and returns a new C&lt;TimeZone::TimeZoneDB&gt; instance.
+</span><span class="">  121: When invoked on an existing object rather than a class name, it returns a
+</span><span class="">  122: shallow clone of that object with any supplied parameters merged in.
+</span><span class="">  123: Passing C&lt;ua =E&lt;gt&gt; undef&gt; in a clone call is silently ignored so that the
+</span><span class="">  124: original user-agent is inherited unchanged.
+</span><span class="">  125: 
+</span><span class="">  126: =head3 ARGUMENTS
+</span><span class="">  127: 
+</span><span class="">  128: =over 4
+</span><span class="">  129: 
+</span><span class="">  130: =item C&lt;key&gt; (required)
+</span><span class="">  131: 
+</span><span class="">  132: API key for timezonedb.com.  Free keys are available at
+</span><span class="">  133: L&lt;https://timezonedb.com/register&gt;.
+</span><span class="">  134: 
+</span><span class="">  135: =item C&lt;ua&gt; (optional)
+</span><span class="">  136: 
+</span><span class="">  137: An HTTP user-agent object.  Must respond to C&lt;get()&gt;.  Defaults to a plain
+</span><span class="">  138: L&lt;LWP::UserAgent&gt; with C&lt;gzip,deflate&gt; accepted.
+</span><span class="">  139: 
+</span><span class="">  140: =item C&lt;host&gt; (optional)
+</span><span class="">  141: 
+</span><span class="">  142: Override the API hostname.  Defaults to C&lt;api.timezonedb.com&gt;.
+</span><span class="">  143: 
+</span><span class="">  144: =item C&lt;cache&gt; (optional)
+</span><span class="">  145: 
+</span><span class="">  146: A L&lt;CHI&gt;-compatible caching object.  Defaults to a private in-memory cache
+</span><span class="">  147: with a one-day expiry.
+</span><span class="">  148: 
+</span><span class="">  149: =item C&lt;min_interval&gt; (optional)
+</span><span class="">  150: 
+</span><span class="">  151: Minimum number of seconds to wait between successive API calls.
+</span><span class="">  152: Defaults to C&lt;0&gt; (no enforced delay).
+</span><span class="">  153: 
+</span><span class="">  154: =back
+</span><span class="">  155: 
+</span><span class="">  156: =head3 RETURNS
+</span><span class="">  157: 
+</span><span class="">  158: A blessed C&lt;TimeZone::TimeZoneDB&gt; reference.
+</span><span class="">  159: Croaks if C&lt;key&gt; is absent.
+</span><span class="">  160: 
+</span><span class="">  161: =head3 SIDE EFFECTS
+</span><span class="">  162: 
+</span><span class="">  163: None.
+</span><span class="">  164: 
+</span><span class="">  165: =head3 NOTES
+</span><span class="">  166: 
+</span><span class="">  167: An optional C&lt;logger&gt; key may be passed; if present it must be an object
+</span><span class="">  168: implementing C&lt;warn()&gt; and C&lt;error()&gt; (e.g. L&lt;Log::Log4perl&gt;).
+</span><span class="">  169: 
+</span><span class="">  170: =head3 API SPECIFICATION
+</span><span class="">  171: 
+</span><span class="">  172: =head4 INPUT
+</span><span class="">  173: 
+</span><span class="">  174:   {
+</span><span class="">  175:     &#39;key&#39;          =&gt; { type =&gt; &#39;string&#39; },
+</span><span class="">  176:     &#39;ua&#39;           =&gt; { type =&gt; &#39;object&#39;, can =&gt; &#39;get&#39;,    optional =&gt; 1 },
+</span><span class="">  177:     &#39;host&#39;         =&gt; { type =&gt; &#39;string&#39;,                  optional =&gt; 1 },
+</span><span class="">  178:     &#39;cache&#39;        =&gt; { type =&gt; &#39;object&#39;,                  optional =&gt; 1 },
+</span><span class="">  179:     &#39;min_interval&#39; =&gt; { type =&gt; &#39;number&#39;, min =&gt; 0,        optional =&gt; 1 },
+</span><span class="">  180:   }
+</span><span class="">  181: 
+</span><span class="">  182: =head4 OUTPUT
+</span><span class="">  183: 
+</span><span class="">  184:   { type =&gt; &#39;object&#39; }   # a blessed TimeZone::TimeZoneDB reference
+</span><span class="">  185: 
+</span><span class="">  186: =head3 FORMAL SPECIFICATION
+</span><span class="">  187: 
+</span><span class="">  188:   TimeZoneDB-State ::= [
+</span><span class="">  189:     key          : STRING ;
+</span><span class="">  190:     ua           : USERAGENT ;
+</span><span class="">  191:     host         : STRING ;
+</span><span class="">  192:     cache        : CACHE ;
+</span><span class="">  193:     min_interval : &acirc;&#132;&#149; ;
+</span><span class="">  194:     last_request : &acirc;&#132;&#149;
+</span><span class="">  195:   ]
+</span><span class="">  196: 
+</span><span class="">  197:   Init
+</span><span class="">  198:     key?          : STRING
+</span><span class="">  199:     ua?           : USERAGENT &acirc;&#136;&ordf; {&acirc;&#138;&yen;}
+</span><span class="">  200:     host?         : STRING &acirc;&#136;&ordf; {&acirc;&#138;&yen;}
+</span><span class="">  201:     cache?        : CACHE &acirc;&#136;&ordf; {&acirc;&#138;&yen;}
+</span><span class="">  202:     min_interval? : &acirc;&#132;&#149; &acirc;&#136;&ordf; {&acirc;&#138;&yen;}
+</span><span class="">  203:     result!       : TimeZoneDB-State
+</span><span class="">  204:   &acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;
+</span><span class="">  205:     key? &acirc;&#137;&nbsp; &quot;&quot; &acirc;&#136;&sect;
+</span><span class="">  206:     result!.key          = key? &acirc;&#136;&sect;
+</span><span class="">  207:     result!.ua           = (if ua? &acirc;&#137;&nbsp; &acirc;&#138;&yen; then ua? else DefaultUA) &acirc;&#136;&sect;
+</span><span class="">  208:     result!.host         = (if host? &acirc;&#137;&nbsp; &acirc;&#138;&yen; then host? else config.host) &acirc;&#136;&sect;
+</span><span class="">  209:     result!.cache        = (if cache? &acirc;&#137;&nbsp; &acirc;&#138;&yen; then cache? else NewCache) &acirc;&#136;&sect;
+</span><span class="">  210:     result!.min_interval = (if min_interval? &acirc;&#137;&nbsp; &acirc;&#138;&yen; then min_interval? else 0) &acirc;&#136;&sect;
+</span><span class="">  211:     result!.last_request = 0
+</span><span class="">  212: 
+</span><span class="">  213: =cut
+</span><span class="">  214: 
+</span><span class="">  215: sub new
+</span><span class="">  216: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">217 → 222 → 239</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">217 → 222 → 0</span></span>  217: 	my $class = shift;
+</span><span class="">  218: 	# Normalise both positional and named calling conventions
+</span><span class="">  219: 	my $params = Params::Get::get_params(undef, \@_) || {};
+</span><span class="">  220: 
+</span><span class="">  221: 	# Support function-style call: TimeZone::TimeZoneDB::new() without -&gt;
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  222: 	if(!defined($class)) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_222_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  223: 		$class = __PACKAGE__;
+</span><span class="">  224: 	} elsif(Scalar::Util::blessed($class)) {
+</span><span class="">  225: 		# Clone path: merge new params over the existing object&#39;s fields.
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  226: 		if(exists($params-&gt;{ua})) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_226_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  227: 			if(!defined($params-&gt;{ua})) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_227_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  228: 				# ua=&gt;undef means &quot;keep the original&quot; -- silently drop it
+</span><span class="">  229: 				delete $params-&gt;{ua};
+</span><span class="">  230: 			} elsif(!Scalar::Util::blessed($params-&gt;{ua}) || !$params-&gt;{ua}-&gt;can(&#39;get&#39;)) {
+</span><span class="">  231: 				# A defined ua must be a proper object with a get() method
+</span><span class="">  232: 				Carp::croak(&quot;&#39;ua&#39; argument must be an object with a get() method&quot;);
+</span><span class="">  233: 			}
+</span><span class="">  234: 		}
+</span><span class="">  235: 		return bless { %{$class}, %{$params} }, ref($class);
+</span><span class="">  236: 	}
+</span><span class="">  237: 
+</span><span class="">  238: 	# Merge any file- or environment-based configuration into $params
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">239 → 246 → 252</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">239 → 246 → 0</span></span>  239: 	$params = Object::Configure::configure($class, $params);
+</span><span class="">  240: 
+</span><span class="">  241: 	# The API key is the only mandatory argument
+</span><span class="">  242: 	my $key = $params-&gt;{&#39;key&#39;} or Carp::croak(&quot;&#39;key&#39; argument is required&quot;);
+</span><span class="">  243: 
+</span><span class="">  244: 	# Build a default user-agent if the caller did not supply one
+</span><span class="">  245: 	my $ua = $params-&gt;{ua};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  246: 	if(!defined($ua)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  247: 		$ua = LWP::UserAgent-&gt;new(agent =&gt; __PACKAGE__ . &quot;/$VERSION&quot;);
+</span><span class="">  248: 		$ua-&gt;default_header(accept_encoding =&gt; &#39;gzip,deflate&#39;);
+</span><span class="">  249: 	}
+</span><span class="">  250: 
+</span><span class="">  251: 	# Prefer an explicit host override, then the package-level default
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">252 → 264 → 0</span></span>  252: 	my $host = $params-&gt;{host} || $config{host};
+</span><span class="">  253: 
+</span><span class="">  254: 	# Fall back to a private in-memory cache if none was supplied
+</span><span class="">  255: 	my $cache = $params-&gt;{cache} || CHI-&gt;new(
+</span><span class="">  256: 		driver     =&gt; &#39;Memory&#39;,
+</span><span class="">  257: 		global     =&gt; 0,
+</span><span class="">  258: 		expires_in =&gt; $config{cache_expires},
+</span><span class="">  259: 	);
+</span><span class="">  260: 
+</span><span class="">  261: 	# Use // so that an explicit 0 (disabled) is not replaced by the default
+</span><span class="">  262: 	my $min_interval = $params-&gt;{min_interval} // $config{min_interval};
+</span><span class="">  263: 
+</span><span class="">  264: 	return bless {
+</span><span class="">  265: 		key          =&gt; $key,
+</span><span class="">  266: 		min_interval =&gt; $min_interval,
+</span><span class="">  267: 		last_request =&gt; 0,		# epoch zero: no request has been made yet
+</span><span class="">  268: 		%{$params},			# pass any extra keys (e.g. logger) through
+</span><span class="">  269: 		cache        =&gt; $cache,		# computed values override %{$params} copies
+</span><span class="">  270: 		host         =&gt; $host,
+</span><span class="">  271: 		ua           =&gt; $ua,
+</span><span class="">  272: 	}, $class;
+</span><span class="">  273: }
+</span><span class="">  274: 
+</span><span class="">  275: =head2 get_time_zone
+</span><span class="">  276: 
+</span><span class="">  277:     my $result = $tzdb-&gt;get_time_zone({ latitude =&gt; 51.34, longitude =&gt; 1.42 });
+</span><span class="">  278:     print $result-&gt;{&#39;zoneName&#39;}, &quot;\n&quot;;
+</span><span class="">  279: 
+</span><span class="">  280:     # Also accepts a Geo::Location::Point-compatible object
+</span><span class="">  281:     use Geo::Location::Point;
+</span><span class="">  282:     my $ramsgate = Geo::Location::Point-&gt;new({ latitude =&gt; 51.34, longitude =&gt; 1.42 });
+</span><span class="">  283:     my $tz = $tzdb-&gt;get_time_zone($ramsgate)-&gt;{&#39;zoneName&#39;};
+</span><span class="">  284: 
+</span><span class="">  285: Queries the timezonedb.com API for the IANA timezone name and associated
+</span><span class="">  286: metadata at the supplied geographic coordinates.
+</span><span class="">  287: Identical queries are served from cache without making a network request.
+</span><span class="">  288: 
+</span><span class="">  289: =head3 ARGUMENTS
+</span><span class="">  290: 
+</span><span class="">  291: =over 4
+</span><span class="">  292: 
+</span><span class="">  293: =item C&lt;latitude&gt; (required)
+</span><span class="">  294: 
+</span><span class="">  295: Decimal degrees, range C&lt;-90&gt; to C&lt;+90&gt;.
+</span><span class="">  296: 
+</span><span class="">  297: =item C&lt;longitude&gt; (required)
+</span><span class="">  298: 
+</span><span class="">  299: Decimal degrees, range C&lt;-180&gt; to C&lt;+180&gt;.
+</span><span class="">  300: 
+</span><span class="">  301: Alternatively, a single L&lt;Geo::Location::Point&gt;-compatible object (any
+</span><span class="">  302: object implementing C&lt;latitude()&gt; and C&lt;longitude()&gt; methods) may be passed
+</span><span class="">  303: instead of a hash or hashref.
+</span><span class="">  304: 
+</span><span class="">  305: =back
+</span><span class="">  306: 
+</span><span class="">  307: =head3 RETURNS
+</span><span class="">  308: 
+</span><span class="">  309: A hashref containing at least C&lt;zoneName&gt; on success.
+</span><span class="">  310: Returns C&lt;undef&gt; when the API responds with a non-C&lt;OK&gt; status.
+</span><span class="">  311: Croaks on HTTP errors or invalid arguments.
+</span><span class="">  312: 
+</span><span class="">  313: =head3 SIDE EFFECTS
+</span><span class="">  314: 
+</span><span class="">  315: Updates the internal response cache and the C&lt;last_request&gt; timestamp.
+</span><span class="">  316: 
+</span><span class="">  317: =head3 NOTES
+</span><span class="">  318: 
+</span><span class="">  319: The API key is transmitted as a URL query parameter because the
+</span><span class="">  320: timezonedb.com API does not support an C&lt;Authorization&gt; header.
+</span><span class="">  321: The key is redacted from all error and warning messages to prevent
+</span><span class="">  322: accidental secret leakage into log aggregators or crash reporters.
+</span><span class="">  323: 
+</span><span class="">  324: =head3 API SPECIFICATION
+</span><span class="">  325: 
+</span><span class="">  326: =head4 INPUT
+</span><span class="">  327: 
+</span><span class="">  328:   {
+</span><span class="">  329:     &#39;latitude&#39;  =&gt; { type =&gt; &#39;number&#39;, min =&gt; -90,  max =&gt; 90  },
+</span><span class="">  330:     &#39;longitude&#39; =&gt; { type =&gt; &#39;number&#39;, min =&gt; -180, max =&gt; 180 },
+</span><span class="">  331:   }
+</span><span class="">  332: 
+</span><span class="">  333: =head4 OUTPUT
+</span><span class="">  334: 
+</span><span class="">  335:   Argument error : croak
+</span><span class="">  336:   HTTP error     : croak
+</span><span class="">  337:   Non-OK status  : undef
+</span><span class="">  338:   Success        : { type =&gt; &#39;hashref&#39;, min =&gt; 1 }
+</span><span class="">  339: 
+</span><span class="">  340: =head3 FORMAL SPECIFICATION
+</span><span class="">  341: 
+</span><span class="">  342:   GetTimeZone
+</span><span class="">  343:     &Icirc;&#148; TimeZoneDB-State   (writes cache and last_request)
+</span><span class="">  344:     lat? : {n : &acirc;&#132;&#157; | -90 &acirc;&#137;&curren; n &acirc;&#137;&curren; 90}
+</span><span class="">  345:     lng? : {n : &acirc;&#132;&#157; | -180 &acirc;&#137;&curren; n &acirc;&#137;&curren; 180}
+</span><span class="">  346:     result! : HASHREF &acirc;&#136;&ordf; {&acirc;&#138;&yen;}
+</span><span class="">  347:   &acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;
+</span><span class="">  348:     let k == sprintf(CACHE_KEY_FMT, lat?, lng?)
+</span><span class="">  349:     &acirc;&#136;&sect; cache.has(k) &acirc;&#135;&#146;
+</span><span class="">  350:           result! = cache.get(k)
+</span><span class="">  351:         &acirc;&#136;&sect; last_request&#39; = last_request
+</span><span class="">  352:         &acirc;&#136;&sect; cache&#39; = cache
+</span><span class="">  353:     &acirc;&#136;&sect; &Acirc;&not;cache.has(k) &acirc;&#135;&#146;
+</span><span class="">  354:           let r == ua.get(ApiUrl(lat?, lng?, key))
+</span><span class="">  355:           &acirc;&#136;&sect; &Acirc;&not;r.ok &acirc;&#135;&#146; &acirc;&#138;&yen;
+</span><span class="">  356:           &acirc;&#136;&sect; r.ok &acirc;&#136;&sect; r.json.status = &quot;OK&quot; &acirc;&#135;&#146;
+</span><span class="">  357:                 result! = r.json
+</span><span class="">  358:               &acirc;&#136;&sect; cache&#39; = cache &acirc;&#138;&#149; {k &acirc;&#134;&brvbar; r.json}
+</span><span class="">  359:               &acirc;&#136;&sect; last_request&#39; = now
+</span><span class="">  360:           &acirc;&#136;&sect; r.ok &acirc;&#136;&sect; r.json.status &acirc;&#137;&nbsp; &quot;OK&quot; &acirc;&#135;&#146;
+</span><span class="">  361:                 result! = &acirc;&#138;&yen;
+</span><span class="">  362:               &acirc;&#136;&sect; cache&#39; = cache
+</span><span class="">  363:               &acirc;&#136;&sect; last_request&#39; = now
+</span><span class="">  364: 
+</span><span class="">  365: =cut
+</span><span class="">  366: 
+</span><span class="">  367: sub get_time_zone
+</span><span class="">  368: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">369 → 373 → 382</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">369 → 373 → 0</span></span>  369: 	my $self = shift;
+</span><span class="">  370: 	my $params;
+</span><span class="">  371: 
+</span><span class="">  372: 	# Accept a Geo::Location::Point-compatible object or a plain hash/hashref
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  373: 	if((@_ == 1) &amp;&amp; Scalar::Util::blessed($_[0]) &amp;&amp; $_[0]-&gt;can(&#39;latitude&#39;)) {
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  374: 		my $location = $_[0];
+</span><span class="">  375: 		$params-&gt;{latitude}  = $location-&gt;latitude();
+</span><span class="">  376: 		$params-&gt;{longitude} = $location-&gt;longitude();
+</span><span class="">  377: 	} else {
+</span><span class="">  378: 		$params = Params::Get::get_params(undef, \@_);
+</span><span class="">  379: 	}
+</span><span class="">  380: 
+</span><span class="">  381: 	# Validate coordinate ranges; croaks on out-of-range or missing values
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">382 → 417 → 422</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">382 → 417 → 0</span></span>  382: 	$params = Params::Validate::Strict::validate_strict(
+</span><span class="">  383: 		args   =&gt; $params,
+</span><span class="">  384: 		schema =&gt; {
+</span><span class="">  385: 			&#39;latitude&#39;  =&gt; { type =&gt; &#39;number&#39;, min =&gt; $LAT_MIN, max =&gt; $LAT_MAX },
+</span><span class="">  386: 			&#39;longitude&#39; =&gt; { type =&gt; &#39;number&#39;, min =&gt; $LNG_MIN, max =&gt; $LNG_MAX },
+</span><span class="">  387: 		}
+</span><span class="">  388: 	);
+</span><span class="">  389: 
+</span><span class="">  390: 	my $latitude  = $params-&gt;{latitude};
+</span><span class="">  391: 	my $longitude = $params-&gt;{longitude};
+</span><span class="">  392: 
+</span><span class="">  393: 	# Params::Validate::Strict silently skips type/range checks for undef values,
+</span><span class="">  394: 	# so guard explicitly to avoid sprintf warnings and silent URL corruption
+</span><span class="">  395: 	Carp::croak(&quot;Required parameter &#39;latitude&#39; must be defined&quot;)  unless defined($latitude);
+</span><span class="">  396: 	Carp::croak(&quot;Required parameter &#39;longitude&#39; must be defined&quot;) unless defined($longitude);
+</span><span class="">  397: 
+</span><span class="">  398: 	# Build the full API URL; key must go in the query string (API requirement)
+</span><span class="">  399: 	my $uri = URI-&gt;new(
+</span><span class="">  400: 		sprintf(&#39;https://%s/%s/%s&#39;,
+</span><span class="">  401: 			$self-&gt;{host},
+</span><span class="">  402: 			$config{api_version},
+</span><span class="">  403: 			$config{api_endpoint}
+</span><span class="">  404: 		)
+</span><span class="">  405: 	);
+</span><span class="">  406: 	$uri-&gt;query_form(
+</span><span class="">  407: 		by     =&gt; $API_BY,
+</span><span class="">  408: 		lat    =&gt; $latitude,
+</span><span class="">  409: 		lng    =&gt; $longitude,
+</span><span class="">  410: 		format =&gt; $API_FORMAT,
+</span><span class="">  411: 		key    =&gt; $self-&gt;{&#39;key&#39;},
+</span><span class="">  412: 	);
+</span><span class="">  413: 	my $url = $uri-&gt;as_string();
+</span><span class="">  414: 
+</span><span class="">  415: 	# Normalise to 6 dp so that 0.1 and 0.1000000 share the same cache slot
+</span><span class="">  416: 	my $cache_key = sprintf($CACHE_KEY_FMT, $latitude, $longitude);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  417: 	if(my $cached = $self-&gt;{cache}-&gt;get($cache_key)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  418: 		return $cached;
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_418_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_418_3: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  419: 	}
+</span><span class="">  420: 
+</span><span class="">  421: 	# Sleep if needed to honour the caller&#39;s minimum inter-request interval
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">422 → 424 → 429</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">422 → 424 → 0</span></span>  422: 	my $now     = time();
+</span><span class="">  423: 	my $elapsed = $now - $self-&gt;{last_request};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  424: 	if($elapsed &lt; $self-&gt;{min_interval}) {
+</span><p> <b> Mutants (Total: 4, Killed: 4, Survived: 0)</b><p><span class="">  425: 		Time::HiRes::sleep($self-&gt;{min_interval} - $elapsed);
+</span><span class="">  426: 	}
+</span><span class="">  427: 
+</span><span class="">  428: 	# Perform the HTTP GET; all transport details are the UA&#39;s responsibility
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">429 → 435 → 441</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">429 → 435 → 0</span></span>  429: 	my $res = $self-&gt;{ua}-&gt;get($url);
+</span><span class="">  430: 
+</span><span class="">  431: 	# Stamp the request time before any early return so rate-limiting is correct
+</span><span class="">  432: 	$self-&gt;{last_request} = time();
+</span><span class="">  433: 
+</span><span class="">  434: 	# Redact the API key before including the URL in any error message
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  435: 	if($res-&gt;is_error()) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  436: 		(my $safe_url = $url) =~ s/key=[^&amp;]*/key=REDACTED/;
+</span><span class="">  437: 		Carp::croak($safe_url . &#39; API returned error: &#39; . $res-&gt;status_line());
+</span><span class="">  438: 	}
+</span><span class="">  439: 
+</span><span class="">  440: 	# Safely decode the JSON body; a malformed response is a soft failure
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">441 → 443 → 449</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">441 → 443 → 0</span></span>  441: 	my $rc;
+</span><span class="">  442: 	eval { $rc = JSON::MaybeXS-&gt;new()-&gt;utf8()-&gt;decode($res-&gt;decoded_content()) };
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  443: 	if($@) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  444: 		Carp::carp(&quot;Failed to parse JSON response: $@&quot;);
+</span><span class="">  445: 		return;
+</span><span class="">  446: 	}
+</span><span class="">  447: 
+</span><span class="">  448: 	# Cache the decoded response before returning so the next caller is served
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">449 → 452 → 461</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">449 → 452 → 0</span></span>  449: 	$self-&gt;{&#39;cache&#39;}-&gt;set($cache_key, $rc);
+</span><span class="">  450: 
+</span><span class="">  451: 	# A non-OK API status means the coordinates returned no result
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  452: 	if($rc &amp;&amp; defined($rc-&gt;{&#39;status&#39;}) &amp;&amp; ($rc-&gt;{&#39;status&#39;} ne &#39;OK&#39;)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  453: 		if(my $logger = $self-&gt;{&#39;logger&#39;}) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_453_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  454: 			(my $safe_url = $url) =~ s/key=[^&amp;]*/key=REDACTED/;
+</span><span class="">  455: 			$logger-&gt;warn(__PACKAGE__ . &quot;: $safe_url returns $rc-&gt;{status}&quot;);
+</span><span class="">  456: 		}
+</span><span class="">  457: 		return;
+</span><span class="">  458: 	}
+</span><span class="">  459: 
+</span><span class="">  460: 	# Assert the output contract: a non-empty hashref
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">461 → 461 → 0</span></span>  461: 	return Return::Set::set_return($rc, { &#39;type&#39; =&gt; &#39;hashref&#39;, &#39;min&#39; =&gt; 1 });
+</span><span class="">  462: }
+</span><span class="">  463: 
+</span><span class="">  464: =head2 ua
+</span><span class="">  465: 
+</span><span class="">  466:     # Getter: retrieve the current user-agent
+</span><span class="">  467:     my $ua = $tzdb-&gt;ua();
+</span><span class="">  468:     $ua-&gt;env_proxy(1);
+</span><span class="">  469: 
+</span><span class="">  470:     # Setter: swap in a throttled agent (returns the new agent for compatibility)
+</span><span class="">  471:     use LWP::UserAgent::Throttled;
+</span><span class="">  472:     my $new_ua = LWP::UserAgent::Throttled-&gt;new();
+</span><span class="">  473:     $new_ua-&gt;throttle(&#39;timezonedb.com&#39; =&gt; 1);
+</span><span class="">  474:     $tzdb-&gt;ua($new_ua);
+</span><span class="">  475: 
+</span><span class="">  476: Gets or sets the HTTP user-agent object used for API requests.
+</span><span class="">  477: The return value is always the current user-agent (after any update),
+</span><span class="">  478: consistent with the convention used by L&lt;LWP::UserAgent&gt; and related
+</span><span class="">  479: packages that expose a C&lt;ua()&gt; accessor.
+</span><span class="">  480: 
+</span><span class="">  481: =head3 ARGUMENTS
+</span><span class="">  482: 
+</span><span class="">  483: =over 4
+</span><span class="">  484: 
+</span><span class="">  485: =item C&lt;ua&gt; (optional)
+</span><span class="">  486: 
+</span><span class="">  487: Replacement user-agent object.  Must implement a C&lt;get($url)&gt; method.
+</span><span class="">  488: Omit to use this method as a getter.
+</span><span class="">  489: 
+</span><span class="">  490: =back
+</span><span class="">  491: 
+</span><span class="">  492: =head3 RETURNS
+</span><span class="">  493: 
+</span><span class="">  494: The user-agent object stored on the instance -- the supplied value when
+</span><span class="">  495: called as a setter, the existing value when called as a getter.
+</span><span class="">  496: Croaks if a defined but invalid object (no C&lt;get()&gt; method) is supplied,
+</span><span class="">  497: or if C&lt;undef&gt; is explicitly passed.
+</span><span class="">  498: 
+</span><span class="">  499: =head3 SIDE EFFECTS
+</span><span class="">  500: 
+</span><span class="">  501: When used as a setter, all subsequent API calls on this object use the new
+</span><span class="">  502: user-agent.
+</span><span class="">  503: 
+</span><span class="">  504: =head3 NOTES
+</span><span class="">  505: 
+</span><span class="">  506: Free timezonedb.com accounts are rate-limited to one request per second.
+</span><span class="">  507: Use L&lt;LWP::UserAgent::Throttled&gt; to enforce this transparently.
+</span><span class="">  508: 
+</span><span class="">  509: The accessor always returns the user-agent rather than C&lt;$self&gt; so that
+</span><span class="">  510: callers can do C&lt;$tzdb-E&lt;gt&gt;ua()-E&lt;gt&gt;env_proxy(1)&gt; in a single expression
+</span><span class="">  511: without ambiguity about what was returned.
+</span><span class="">  512: 
+</span><span class="">  513: =head3 API SPECIFICATION
+</span><span class="">  514: 
+</span><span class="">  515: =head4 INPUT
+</span><span class="">  516: 
+</span><span class="">  517:   # Getter (no argument)
+</span><span class="">  518:   {}
+</span><span class="">  519: 
+</span><span class="">  520:   # Setter
+</span><span class="">  521:   { &#39;ua&#39; =&gt; { type =&gt; &#39;object&#39;, can =&gt; &#39;get&#39; } }
+</span><span class="">  522: 
+</span><span class="">  523: =head4 OUTPUT
+</span><span class="">  524: 
+</span><span class="">  525:   { type =&gt; &#39;object&#39; }   # the stored user-agent (getter or setter)
+</span><span class="">  526: 
+</span><span class="">  527: =head3 FORMAL SPECIFICATION
+</span><span class="">  528: 
+</span><span class="">  529:   UA
+</span><span class="">  530:     Delta TimeZoneDB-State
+</span><span class="">  531:     ua? : USERAGENT &acirc;&#136;&ordf; {&acirc;&#138;&yen;}   (&acirc;&#138;&yen; = not supplied)
+</span><span class="">  532:     ua! : USERAGENT
+</span><span class="">  533:   &acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;&acirc;&#148;&#128;
+</span><span class="">  534:     (ua? = &acirc;&#138;&yen; &acirc;&#136;&sect; ua&#39; = ua) &acirc;&#136;&uml;
+</span><span class="">  535:     (ua? &acirc;&#137;&nbsp; &acirc;&#138;&yen; &acirc;&#136;&sect; defined(ua?) &acirc;&#136;&sect; ua? can &#39;get&#39;
+</span><span class="">  536:              &acirc;&#136;&sect; ua&#39; = ua?
+</span><span class="">  537:              &acirc;&#136;&sect; &acirc;&#136;&#128; x : {key, host, cache, min_interval, last_request} &acirc;&#128;&cent; x&#39; = x)
+</span><span class="">  538:     &acirc;&#136;&sect; ua! = ua&#39;
+</span><span class="">  539: 
+</span><span class="">  540: =cut
+</span><span class="">  541: 
+</span><span class="">  542: sub ua {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">543 → 553 → 560</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">543 → 553 → 0</span></span>  543: 	my $self = shift;
+</span><span class="">  544: 
+</span><span class="">  545: 	# Getter path: no arguments, return the stored agent immediately
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  546: 	return $self-&gt;{ua} unless @_;
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_546_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_546_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  547: 
+</span><span class="">  548: 	# Params::Get::get_params(&#39;ua&#39;, \@_) mis-routes the named form ua(ua =&gt; $ref)
+</span><span class="">  549: 	# into { ua =&gt; [$key, $ref] } because its $array_ref path fires before the
+</span><span class="">  550: 	# even-count hash path when the value is a reference (Params::Get line 258).
+</span><span class="">  551: 	# Detect and fix the named-pair form manually before passing to validate_strict.
+</span><span class="">  552: 	my $args;
+</span><span class="survived-2 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one). Mutation survived. Add targeted tests to validate this branch.">  553: 	if(@_ == 2 &amp;&amp; defined($_[0]) &amp;&amp; !ref($_[0]) &amp;&amp; $_[0] eq &#39;ua&#39;) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>NUM_BOUNDARY_553_8_!=: Numeric boundary flip == to !=</b><br>HIGH: Likely missing edge-case test (boundary value)
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boundary test suggestion
+is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>COND_INV_553_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  554: 		$args = { ua =&gt; $_[1] };	# named: ua(ua =&gt; $obj)
+</span><span class="">  555: 	} else {
+</span><span class="">  556: 		$args = Params::Get::get_params(&#39;ua&#39;, \@_);	# positional: ua($obj)
+</span><span class="">  557: 	}
+</span><span class="">  558: 
+</span><span class="">  559: 	# Validate that the supplied object implements the interface we depend on
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">560 → 572 → 580</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">560 → 572 → 0</span></span>  560: 	my $params = Params::Validate::Strict::validate_strict(
+</span><span class="">  561: 		args   =&gt; $args,
+</span><span class="">  562: 		schema =&gt; {
+</span><span class="">  563: 			ua =&gt; {
+</span><span class="">  564: 				type =&gt; &#39;object&#39;,
+</span><span class="">  565: 				can  =&gt; &#39;get&#39;,
+</span><span class="">  566: 			}
+</span><span class="">  567: 		}
+</span><span class="">  568: 	);
+</span><span class="">  569: 
+</span><span class="">  570: 	# Params::Validate::Strict skips the type check for undef &#39;object&#39; params,
+</span><span class="">  571: 	# so we must guard explicitly to prevent silent corruption of $self-&gt;{ua}
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  572: 	if(!defined($params-&gt;{ua})) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_572_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  573: 		if(my $logger = $self-&gt;{&#39;logger&#39;}) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_573_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  574: 			$logger-&gt;error(&#39;ua() requires a defined value&#39;);
+</span><span class="">  575: 		}
+</span><span class="">  576: 		Carp::croak(&#39;ua() requires a defined value&#39;);
+</span><span class="">  577: 	}
+</span><span class="">  578: 
+</span><span class="">  579: 	# Store the new agent and return it, consistent with LWP::UserAgent convention
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">580 → 581 → 0</span></span>  580: 	$self-&gt;{ua} = $params-&gt;{ua};
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  581: 	return $self-&gt;{ua};
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_581_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_581_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  582: }
+</span><span class="">  583: 
+</span><span class="">  584: =head1 AUTHOR
+</span><span class="">  585: 
+</span><span class="">  586: Nigel Horne, C&lt;&lt; &lt;njh@bandsman.co.uk&gt; &gt;&gt;
+</span><span class="">  587: 
+</span><span class="">  588: This library is free software; you can redistribute it and/or modify
+</span><span class="">  589: it under the same terms as Perl itself.
+</span><span class="">  590: 
+</span><span class="">  591: Lots of thanks to the folks at L&lt;https://timezonedb.com&gt;.
+</span><span class="">  592: 
+</span><span class="">  593: =head1 BUGS
+</span><span class="">  594: 
+</span><span class="">  595: This module is provided as-is without any warranty.
+</span><span class="">  596: 
+</span><span class="">  597: Please report any bugs or feature requests to C&lt;bug-timezone-timezonedb at rt.cpan.org&gt;,
+</span><span class="">  598: or through the web interface at
+</span><span class="">  599: L&lt;http://rt.cpan.org/NoAuth/ReportBug.html?Queue=TimeZone-TimeZoneDB&gt;.
+</span><span class="">  600: I will be notified, and then you&#39;ll automatically be notified of progress
+</span><span class="">  601: on your bug as I make changes.
+</span><span class="">  602: 
+</span><span class="">  603: =head1 SEE ALSO
+</span><span class="">  604: 
+</span><span class="">  605: =over 4
+</span><span class="">  606: 
+</span><span class="">  607: =item * TimezoneDB API: L&lt;https://timezonedb.com/api&gt;
+</span><span class="">  608: 
+</span><span class="">  609: =item * Testing Dashboard: L&lt;https://nigelhorne.github.io/TimeZone-TimeZoneDB/coverage/&gt;
+</span><span class="">  610: 
+</span><span class="">  611: =back
+</span><span class="">  612: 
+</span><span class="">  613: =head1 LICENSE AND COPYRIGHT
+</span><span class="">  614: 
+</span><span class="">  615: Copyright 2023-2025 Nigel Horne.
+</span><span class="">  616: 
+</span><span class="">  617: This program is released under the following licence: GPL2
+</span><span class="">  618: 
+</span><span class="">  619: =cut
+</span><span class="">  620: 
+</span><span class="">  621: 1;
+</span></pre>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+}
+
+(function() {
+    const saved = localStorage.getItem('theme');
+    if(saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+    }
+})();
+
+document.addEventListener("mousemove", function(e) {
+	document.querySelectorAll(".lcsaj-tip-text").forEach(function(tip) {
+		tip.style.left = (e.clientX + 12) + "px";
+		tip.style.top  = (e.clientY + 12) + "px";
+	});
+});
+</script>
+</body>
+</html>
+	

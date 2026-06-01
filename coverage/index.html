@@ -153,7 +153,7 @@
 
 <tbody>
 
-<tr class="high"><td><a href="blib-lib-TimeZone-TimeZoneDB-pm.html" title="View coverage line by line" target="_blank">lib/TimeZone/TimeZoneDB.pm</a> <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB/blob/0784f8e6f491a260bc844b9d2bbb5447d4014700/lib/TimeZone/TimeZoneDB.pm" class="icon-link" title="View source on GitHub">&#128269;</a><canvas class="sparkline" width="80" height="20" data-points="76.6,76.6,76.6,76.6,76.6,76.6,76.6,76.6,71.9,72.7"></canvas></td><td>100.0</td><td>100.0</td><td>82.9</td><td>100.0</td><td><span class="coverage-badge badge-good" title="Excellent coverage">97.2%</span></td><td class="positive" title="Previous (sparkline): 71.9%">&#9650; 0.8%</td></tr>
+<tr class="high"><td><a href="blib-lib-TimeZone-TimeZoneDB-pm.html" title="View coverage line by line" target="_blank">lib/TimeZone/TimeZoneDB.pm</a> <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB/blob/bb9bfa3959aec214d23b7be94aa71e529d6216e1/lib/TimeZone/TimeZoneDB.pm" class="icon-link" title="View source on GitHub">&#128269;</a><canvas class="sparkline" width="80" height="20" data-points="76.6,76.6,76.6,76.6,76.6,76.6,76.6,71.9,72.7,97.2"></canvas></td><td>100.0</td><td>100.0</td><td>82.9</td><td>100.0</td><td><span class="coverage-badge badge-good" title="Excellent coverage">97.2%</span></td><td class="positive" title="Previous (sparkline): 72.7%">&#9650; 24.5%</td></tr>
 <tr class="summary-row nosort"><td colspan="2"><strong>Summary</strong></td><td colspan="2">1 files</td><td colspan="3">Avg: 97%, Low: 0</td></tr>
 <tr class="high nosort"><td><strong>Total</strong></td><td>100.0</td><td>100.0</td><td>82.9</td><td>100.0</td><td colspan="2"><strong>97.2</strong></td></tr>
 </tbody></table>
@@ -209,7 +209,8 @@ const dataPoints = [ { x: "2025-09-02T09:04:20-04:00", y: 76.6467065868264, delt
 { x: "2025-12-29T09:44:03-05:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/7c81a2846392ebd166e8f1c1a9666e70715a0562", label: "2025-12-29T09:44:03-05:00", pointBackgroundColor: "gray", comment: "Merge pull request #3 from nigelhorne/dependabot/github_actions/actions/checkout-6" },
 { x: "2026-05-21T08:36:01-04:00", y: 76.6467065868264, delta: 0.0, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/9696902215e132e7767faca8374fc6841bfdeb34", label: "2026-05-21T08:36:01-04:00", pointBackgroundColor: "gray", comment: "Reset the fuzz testing" },
 { x: "2026-06-01T10:50:59-04:00", y: 72.7272727272727, delta: -3.9, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/5ed887490955ff8411c904dcc12182b7d7cf46dd", label: "2026-06-01T10:50:59-04:00", pointBackgroundColor: "red", comment: "Fix ua(undef) silently corrupting the stored user-agent" },
-{ x: "2026-06-01T13:20:57-04:00", y: 71.8918918918919, delta: -0.8, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/14f30684e1ec9efd41d25ebacd25503e4315ed3b", label: "2026-06-01T13:20:57-04:00", pointBackgroundColor: "red", comment: "Added Z definitions" } ];
+{ x: "2026-06-01T13:20:57-04:00", y: 71.8918918918919, delta: -0.8, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/14f30684e1ec9efd41d25ebacd25503e4315ed3b", label: "2026-06-01T13:20:57-04:00", pointBackgroundColor: "red", comment: "Added Z definitions" },
+{ x: "2026-06-01T20:50:11+00:00", y: 97.1830985915493, delta: 25.3, url: "https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/b6d4d6ce4764ae8d67a53012f0d4e99e6b708032", label: "2026-06-01T20:50:11+00:00", pointBackgroundColor: "green", comment: "Update mutation results (2026-06-01 0784f8e)" } ];
 const regressionPoints = linearRegression(dataPoints);
 // Try to register the zoom plugin (handles different UMD builds)
 (function registerZoomPlugin(){
@@ -465,13 +466,13 @@ function refresh(){
 <h2>Mutation Report</h2>
 <h3>Mutation Summary</h3>
 <ul>
-<li><b>Score</b>: 100%</li>
-<li><b>Total</b>: 0</li>
+<li><b>Score</b>: 44.00%</li>
+<li><b>Total</b>: 25</li>
 <li><b>Killed</b>: 
-0
+11
 </li>
 <li><b>Survived</b>: 
-0
+14
 </li>
 </ul>
 <h3>Mutation Files</h3>
@@ -480,6 +481,7 @@ function refresh(){
 
 <tr><th>File</th><th>Total</th><th>Killed</th><th>Survivors</th><th>Skipped</th><th>Score%</th><th>Complexity</th><th title="TER1=Statement, TER2=Branch, TER3=LCSAJ Path">TER1 / TER2 / TER3</th></tr>
 
+<tr class="low"><td><a href="mutation_html/lib/TimeZone/TimeZoneDB.pm.html" title="View mutation line by line" target="_blank">lib/TimeZone/TimeZoneDB.pm</a> <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB/blob/bb9bfa3959aec214d23b7be94aa71e529d6216e1/lib/TimeZone/TimeZoneDB.pm" class="icon-link" title="View source on GitHub">&#128269;</a></td><td>25</td><td>11</td><td>14</td><td>0</td><td><span class="coverage-badge badge-bad" title="Needs improvement">44.0%</span></td><td><span class="coverage-badge badge-good" title="Good">31</span></td><td><span class="coverage-badge badge-good" title="Excellent">100.0%</span> / <span class="coverage-badge badge-good" title="Excellent">100.0%</span> / <span class="coverage-badge badge-good" title="Excellent">100.0%</span></td></tr>
 </table>
 
 <h2>Structural Coverage (Approximate)</h2>
@@ -490,11 +492,11 @@ Branch Coverage: 100.00% (40 / 40)<br>
 </div>
 <h2>Executive Summary</h2>
 <div class='summary'>
-Tests execute 100.00% of the code. No mutation data available yet — trigger the mutation workflow for fault detection analysis.
+Tests execute 100.00% of the code but detect only 44.00% of injected faults — consider adding targeted tests to kill surviving mutants.
 </div>
 <footer>
 	<p>Project: <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB">TimeZone-TimeZoneDB</a></p>
-	<p><em>Last updated: 2026-06-01 20:49:35 - <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/0784f8e6f491a260bc844b9d2bbb5447d4014700">commit <code>0784f8e</code></a></em></p>
+	<p><em>Last updated: 2026-06-01 21:18:48 - <a href="https://github.com/nigelhorne/TimeZone-TimeZoneDB/commit/bb9bfa3959aec214d23b7be94aa71e529d6216e1">commit <code>bb9bfa3</code></a></em></p>
 	<p style="float: right; font-size: 0.85em; color: #999;">Powered by <a href="https://metacpan.org/dist/App-Test-Generator">App::Test::Generator 0.38</a></p>
 </footer>
 </body>
