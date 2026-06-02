@@ -4,331 +4,331 @@
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354847.48595,
+         "finish" : 1780359086.25031,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "-e",
-         "start" : 1780354832.98524,
-         "version" : "0.04"
+         "start" : 1780359074.35622,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354833.13349,
+         "finish" : 1780359074.46888,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "-e",
-         "start" : 1780354833.1334,
-         "version" : "0.04"
+         "start" : 1780359074.46876,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354833.5184,
+         "finish" : 1780359074.7696,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/00-load.t",
-         "start" : 1780354833.51726,
-         "version" : "0.04"
+         "start" : 1780359074.76859,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354834.10518,
+         "finish" : 1780359075.22495,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/10-compile.t",
-         "start" : 1780354833.76475,
-         "version" : "0.04"
+         "start" : 1780359074.96152,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354834.59844,
+         "finish" : 1780359075.60488,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/30-basics.t",
-         "start" : 1780354834.51177,
-         "version" : "0.04"
+         "start" : 1780359075.53849,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354834.93102,
+         "finish" : 1780359075.86891,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/carp.t",
-         "start" : 1780354834.93041,
-         "version" : "0.04"
+         "start" : 1780359075.86819,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354835.20005,
+         "finish" : 1780359076.07728,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/comment-spelling.t",
-         "start" : 1780354835.19939,
-         "version" : "0.04"
+         "start" : 1780359076.07668,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354835.80423,
+         "finish" : 1780359076.53492,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/edge_cases.t",
-         "start" : 1780354835.60624,
-         "version" : "0.04"
+         "start" : 1780359076.38979,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354836.22325,
+         "finish" : 1780359076.85004,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/eof.t",
-         "start" : 1780354836.223,
-         "version" : "0.04"
+         "start" : 1780359076.84979,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354836.45787,
+         "finish" : 1780359077.03343,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/eol.t",
-         "start" : 1780354836.45768,
-         "version" : "0.04"
+         "start" : 1780359077.03316,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354836.97949,
+         "finish" : 1780359077.44351,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/extended_tests.t",
-         "start" : 1780354836.85204,
-         "version" : "0.04"
+         "start" : 1780359077.34484,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354837.67425,
+         "finish" : 1780359077.97801,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/function.t",
-         "start" : 1780354837.52778,
-         "version" : "0.04"
+         "start" : 1780359077.86109,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354838.18849,
+         "finish" : 1780359078.37724,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/fuzz.t",
-         "start" : 1780354838.1875,
-         "version" : "0.04"
+         "start" : 1780359078.37619,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354838.60098,
+         "finish" : 1780359078.70111,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/get_time_zone.t",
-         "start" : 1780354838.59902,
-         "version" : "0.04"
+         "start" : 1780359078.69909,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354841.20792,
+         "finish" : 1780359081.16345,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/integration.t",
-         "start" : 1780354839.01167,
-         "version" : "0.04"
+         "start" : 1780359079.01973,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354842.85413,
+         "finish" : 1780359082.6543,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/limiting.t",
-         "start" : 1780354841.78105,
-         "version" : "0.04"
+         "start" : 1780359081.59719,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354843.20432,
+         "finish" : 1780359082.92541,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/links.t",
-         "start" : 1780354843.20354,
-         "version" : "0.04"
+         "start" : 1780359082.92468,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354843.71903,
+         "finish" : 1780359083.32261,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/mutant_killers.t",
-         "start" : 1780354843.61311,
-         "version" : "0.04"
+         "start" : 1780359083.24217,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354844.09511,
+         "finish" : 1780359083.60497,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/no404s.t",
-         "start" : 1780354844.09445,
-         "version" : "0.04"
+         "start" : 1780359083.60431,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354844.36576,
+         "finish" : 1780359083.8137,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/noopentickets.t",
-         "start" : 1780354844.36374,
-         "version" : "0.04"
+         "start" : 1780359083.81203,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354844.64024,
+         "finish" : 1780359084.02775,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/noplan.t",
-         "start" : 1780354844.6396,
-         "version" : "0.04"
+         "start" : 1780359084.02703,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354844.90436,
+         "finish" : 1780359084.23686,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/pod-cm.t",
-         "start" : 1780354844.90361,
-         "version" : "0.04"
+         "start" : 1780359084.23604,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354845.16808,
+         "finish" : 1780359084.44522,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/pod-coverage.t",
-         "start" : 1780354845.16754,
-         "version" : "0.04"
+         "start" : 1780359084.44454,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354845.4194,
+         "finish" : 1780359084.64213,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/pod-snippets.t",
-         "start" : 1780354845.41873,
-         "version" : "0.04"
+         "start" : 1780359084.64137,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354845.68523,
+         "finish" : 1780359084.85334,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/pod-spelling.t",
-         "start" : 1780354845.68464,
-         "version" : "0.04"
+         "start" : 1780359084.85263,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354845.94773,
+         "finish" : 1780359085.063,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/pod-synopsis.t",
-         "start" : 1780354845.94751,
-         "version" : "0.04"
+         "start" : 1780359085.06272,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354846.19675,
+         "finish" : 1780359085.25823,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/pod.t",
-         "start" : 1780354846.19614,
-         "version" : "0.04"
+         "start" : 1780359085.25757,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354846.46499,
+         "finish" : 1780359085.46594,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/port.t",
-         "start" : 1780354846.46429,
-         "version" : "0.04"
+         "start" : 1780359085.46514,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354847.02714,
+         "finish" : 1780359085.89824,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/unit.t",
-         "start" : 1780354846.86983,
-         "version" : "0.04"
+         "start" : 1780359085.77647,
+         "version" : "0.05"
       },
       {
          "OS" : "linux",
          "abstract" : "Interface to L<https://timezonedb.com> for looking up Timezone data",
          "dir" : "/home/runner/work/TimeZone-TimeZoneDB/TimeZone-TimeZoneDB",
-         "finish" : 1780354847.44322,
+         "finish" : 1780359086.21342,
          "name" : "TimeZone-TimeZoneDB",
          "perl" : "5.40.4",
          "run" : "t/vars.t",
-         "start" : 1780354847.44303,
-         "version" : "0.04"
+         "start" : 1780359086.21314,
+         "version" : "0.05"
       }
    ],
    "summary" : {
