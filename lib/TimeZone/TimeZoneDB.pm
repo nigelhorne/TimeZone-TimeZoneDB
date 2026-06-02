@@ -23,11 +23,11 @@ TimeZone::TimeZoneDB - Interface to L<https://timezonedb.com> for looking up Tim
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 # ---------------------------------------------------------------------------
 # Compile-time constants for the timezonedb.com REST API.
