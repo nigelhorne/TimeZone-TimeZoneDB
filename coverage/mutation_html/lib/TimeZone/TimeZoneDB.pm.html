@@ -674,7 +674,7 @@ Approximate LCSAJ segments: 45<br>
 </span><span class="">  364: 	# Normalise to 6 dp so that 0.1 and 0.1000000 share the same cache slot
 </span><span class="">  365: 	my $cache_key = sprintf($CACHE_KEY_FMT, $latitude, $longitude);
 </span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  366: 	if(my $cached = $self-&gt;{cache}-&gt;get($cache_key)) {
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  367: 		return $cached;
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  367: 		return $cached;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -834,7 +834,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">485 → 495 → 502</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">485 → 495 → 0</span></span>  485: 	my $self = shift;
 </span><span class="">  486: 
 </span><span class="">  487: 	# Getter path: no arguments, return the stored agent immediately
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  488: 	return $self-&gt;{ua} unless @_;
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  488: 	return $self-&gt;{ua} unless @_;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -862,7 +862,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  492: 	# even-count hash path when the value is a reference (Params::Get line 258).
 </span><span class="">  493: 	# Detect and fix the named-pair form manually before passing to validate_strict.
 </span><span class="">  494: 	my $args;
-</span><span class="survived-2 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch. Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  495: 	if(@_ == 2 &amp;&amp; defined($_[0]) &amp;&amp; !ref($_[0]) &amp;&amp; $_[0] eq &#39;ua&#39;) {
+</span><span class="survived-2 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one). Mutation survived. Add targeted tests to validate this branch.">  495: 	if(@_ == 2 &amp;&amp; defined($_[0]) &amp;&amp; !ref($_[0]) &amp;&amp; $_[0] eq &#39;ua&#39;) {
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
