@@ -8,8 +8,6 @@ use strict;
 use warnings;
 
 use lib 'lib';
-use lib "$ENV{HOME}/src/njh/Test-Mockingbird/lib";
-use lib "$ENV{HOME}/src/njh/Test-Returns/lib";
 
 use HTTP::Response;
 use Readonly;

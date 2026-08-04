@@ -5,8 +5,6 @@
 use strict;
 use warnings;
 
-use lib "$ENV{HOME}/src/njh/Test-Mockingbird/lib";
-
 use HTTP::Response;
 use Test::Most tests => 5;
 use Test::Mockingbird;
